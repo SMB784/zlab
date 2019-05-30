@@ -1,10 +1,4 @@
-from astropy.io import fits
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-from pathlib import Path
-
-import os,re
+from SX674_Spectrometer import *
 
 data_root_directory='/home/sean/Desktop/5-29-19/NewSpectrometer/'
 # sub_folder='27000uW_10ms_4x4Binning/'
@@ -25,10 +19,6 @@ start=595
 stop=630
 tolerance=0.2
 GeV=601
-
-initial=[[601.0,612,625],\
-         [4.5,11,40],\
-         [1,1,1],0]
 
 numbers=re.compile(r'(\d+)')
 
