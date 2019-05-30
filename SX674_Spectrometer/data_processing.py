@@ -1,10 +1,9 @@
 from astropy.io import fits
 import pandas as pd
 import numpy as np
-from lmfit import Model
 import matplotlib.pyplot as plt
 from pathlib import Path
-from scipy import stats
+
 import os,re
 
 data_root_directory='/home/sean/Desktop/5-29-19/NewSpectrometer/'
