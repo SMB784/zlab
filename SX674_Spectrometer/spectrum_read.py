@@ -2,7 +2,6 @@ from SX674_Spectrometer import *
 
 start=595
 stop=630
-tolerance=0.2
 
 spectral_data=[]
 
@@ -43,7 +42,13 @@ for root,dirs,files in os.walk(Path(data_root_directory+sub_folder)):
         
         spectral_data=np.c_[spectral_data,normalized_amplitude]
         
+#         if(file_count==1):
+#             plt.plot(wavelength,normalized_amplitude)
+#             plt.show()
+#             break
+
+#         spectral_data.to_csv(Path(data_root_directory+sub_folder+save_folder+"spectrum"+str(file_count)+".csv"),header=None)
+#         spectrum.to_csv(Path(data_root_directory+sub_folder+save_folder+"rawDataFile"+str(file_count)+".csv"),header=None)
         file_count+=1
+    
     spectral_data=pd.DataFrame(spectral_data)
-#         spectrumData.to_csv(Path(data_root_directory+sub_folder+save_folder+"spectrum"+str(fileCount)+".csv"),header=None)
-#         spectrum.to_csv(Path(data_root_directory+sub_folder+save_folder+"rawDataFile"+str(fileCount)+".csv"),header=None)
