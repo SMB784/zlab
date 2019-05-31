@@ -26,6 +26,8 @@ initial_fit=[[601.0,612,625],\
              [4.5,11,40],\
              [1,1,1],0]
 
+temp_cal=[0,0.008] # from center wavelength vs temp: [intercept, slope]
+
 numbers=re.compile(r'(\d+)')
 
 def numerical_sort(value):

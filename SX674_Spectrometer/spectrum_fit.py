@@ -19,9 +19,11 @@ params=lmodel.make_params(c1=initial_fit[0][0],w1=initial_fit[1][0],h1=initial_f
 fit_values=[]
 for i in range(1,len(input_data.spectral_data.columns)):
     result=lmodel.fit(input_data.spectral_data[i],params,x=input_data.spectral_data[0])
-    fit_values.append(findValue(result.best_values)[0]-75128.49624473446)
-#     plt.plot(input_data.spectral_data[0],input_data.spectral_data[i])
-#     plt.plot(input_data.spectral_data[0],result.best_fit)
-    print(result.best_values)
 
-print(np.std(np.transpose(fit_values)))
+    if(i==1):
+        init_temp=findValue(result.best_values)[0]/temp_cal[1]+temp_cal[0]
+
+    fit_values.append(findValue(result.best_values)[0]/temp_cal[1]-init_temp)
+
+temp_stdev=np.std(np.transpose(fit_values))
+print(temp_stdev)
