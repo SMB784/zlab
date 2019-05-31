@@ -26,5 +26,5 @@ for i in range(1,len(input_data.spectral_data.columns)):
     fit_values.append(findValue(result.best_values)[0]/temp_cal[1]-init_temp)
 
 temp_stdev=np.std(np.transpose(fit_values))
-print(temp_stdev)
-print(fit_values)
+
+
