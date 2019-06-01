@@ -29,3 +29,4 @@ temp_stdev=np.std(np.transpose(fit_values))
 
 print(temp_stdev)
 print(fit_values)
+print(temp_stdev)
