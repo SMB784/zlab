@@ -28,4 +28,3 @@ for i in range(1,len(input_data.spectral_data.columns)):
 temp_stdev=np.std(np.transpose(fit_values))
 
 print(temp_stdev)
-print("test")
