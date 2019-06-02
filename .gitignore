@@ -1,2 +1,3 @@
 ./SX674_Spectrometer/data/*
 ./*.json
+./quickstart.py
