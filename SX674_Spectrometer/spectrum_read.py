@@ -5,6 +5,8 @@ stop=630
 
 spectral_data=[]
 
+download_from_teamdrive()
+
 for root,dirs,files in os.walk(Path(data_root_directory+sub_folder)):
     dirs.sort(key=numerical_sort) # sorts directories by ascending number
     file_count=0
@@ -52,3 +54,4 @@ for root,dirs,files in os.walk(Path(data_root_directory+sub_folder)):
         file_count+=1
     
     spectral_data=pd.DataFrame(spectral_data)
+    print(spectral_data)
