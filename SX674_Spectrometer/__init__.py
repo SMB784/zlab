@@ -8,8 +8,8 @@ from lmfit import Model
 import os,re
 import requests
 
-data_root_directory='/home/sean/Desktop/5-29-19/NewSpectrometer/' # data directory goes here
-sub_folder='27000uW_250ms_NoBin/' # data subfolder goes here
+data_root_directory='C:/Users/Sean/Desktop/5-29-19/NewSpectrometer/' # data directory goes here
+sub_folder='62000uW_125ms_NoBin/' # data subfolder goes here
 save_folder='spectralData/'
 
 GeV=601
