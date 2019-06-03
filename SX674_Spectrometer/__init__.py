@@ -5,11 +5,17 @@ import matplotlib.pyplot as plt
 from pathlib import Path
 from scipy import stats
 from lmfit import Model
-import os,re
-import requests
+import os,re,io
+from google.auth.transport.requests import Request
+from googleapiclient.http import MediaIoBaseDownload
+from googleapiclient.discovery import build
+from httplib2 import Http
+from oauth2client import client, file, tools
 
 download_dir=Path(Path(os.getcwd())/"data/")
-drive_URL = ""
+
+drive_URL = "https://drive.google.com/open?id=1eR65LvN4WQiiEW5uGWzsY6CoNnzwoFn3"
+
 
 data_root_directory='/home/sean/Desktop/5-29-19/NewSpectrometer/' # data directory goes here
 sub_folder='27000uW_250ms_NoBin/' # data subfolder goes here
@@ -36,35 +42,16 @@ numbers=re.compile(r'(\d+)')
 
 
 def download_from_teamdrive():
-
+    creds=file.Storage('/home/sean/zlab/credentials.json').get()
+    drive_service=build('drive','v3',http=creds.authorize(Http()))
     file_id = drive_URL.split("id=")[1]
-    
-    session = requests.Session()
-
-    response = session.get(drive_URL, params = { 'id' : file_id }, stream = True)
-    token = get_confirm_token(response)
-
-    if token:
-        params = { 'id' : file_id, 'confirm' : token }
-        response = session.get(drive_URL, params = params, stream = True)
-
-    save_response_content(response, download_dir)    
-
-def get_confirm_token(response):
-    for key, value in response.cookies.items():
-        if key.startswith('download_warning'):
-            return value
-
-    return None
-
-def save_response_content(response, destination):
-    CHUNK_SIZE = 32768
-
-    with open(destination, "wb") as f:
-        for chunk in response.iter_content(CHUNK_SIZE):
-            if chunk: # filter out keep-alive new chunks
-                f.write(chunk)
-
+    request = drive_service.files().get_media(fileId=file_id)
+    fh = io.BytesIO()
+    downloader = MediaIoBaseDownload(fh, request)
+    done = False
+    while done is False:
+        status, done = downloader.next_chunk()
+        print("Download %d%%." % int(status.progress() * 100))   
 
 def numerical_sort(value):
     parts=numbers.split(value)
