@@ -8,9 +8,6 @@ from lmfit import Model
 import os,re
 import requests
 
-download_dir=Path(Path(os.getcwd())/"data/")
-drive_URL = ""
-
 data_root_directory='/home/sean/Desktop/5-29-19/NewSpectrometer/' # data directory goes here
 sub_folder='27000uW_250ms_NoBin/' # data subfolder goes here
 save_folder='spectralData/'
@@ -33,38 +30,6 @@ initial_fit=[[601.0,612,625],\
 temp_cal=[0,0.008] # from center wavelength vs temp: [intercept, slope]
 
 numbers=re.compile(r'(\d+)')
-
-
-def download_from_teamdrive():
-
-    file_id = drive_URL.split("id=")[1]
-    
-    session = requests.Session()
-
-    response = session.get(drive_URL, params = { 'id' : file_id }, stream = True)
-    token = get_confirm_token(response)
-
-    if token:
-        params = { 'id' : file_id, 'confirm' : token }
-        response = session.get(drive_URL, params = params, stream = True)
-
-    save_response_content(response, download_dir)    
-
-def get_confirm_token(response):
-    for key, value in response.cookies.items():
-        if key.startswith('download_warning'):
-            return value
-
-    return None
-
-def save_response_content(response, destination):
-    CHUNK_SIZE = 32768
-
-    with open(destination, "wb") as f:
-        for chunk in response.iter_content(CHUNK_SIZE):
-            if chunk: # filter out keep-alive new chunks
-                f.write(chunk)
-
 
 def numerical_sort(value):
     parts=numbers.split(value)

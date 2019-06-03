@@ -5,8 +5,6 @@ stop=630
 
 spectral_data=[]
 
-download_from_teamdrive()
-
 for root,dirs,files in os.walk(Path(data_root_directory+sub_folder)):
     dirs.sort(key=numerical_sort) # sorts directories by ascending number
     file_count=0
