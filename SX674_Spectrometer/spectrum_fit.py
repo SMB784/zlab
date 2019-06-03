@@ -1,5 +1,12 @@
 from SX674_Spectrometer import *
-from SX674_Spectrometer import spectrum_read as input_data
+
+try:
+    input_data=pd.read_csv(Path(Path(os.getcwd())/(sub_folder+"spectral_data.csv")))
+    print(input_data)
+except:
+    from SX674_Spectrometer import spectrum_read
+    input_data=spectrum_read.spectral_data
+    print(input_data)
 
 lmodel=Model(doubleLorentzianFit)
 
@@ -17,8 +24,8 @@ params=lmodel.make_params(c1=initial_fit[0][0],w1=initial_fit[1][0],h1=initial_f
                           o1=initial_fit[3])
 
 fit_values=[]
-for i in range(1,len(input_data.spectral_data.columns)):
-    result=lmodel.fit(input_data.spectral_data[i],params,x=input_data.spectral_data[0])
+for i in range(1,len(input_data.columns)):
+    result=lmodel.fit(input_data[i],params,x=input_data[0])
 
     if(i==1):
         init_temp=findValue(result.best_values)[0]/temp_cal[1]+temp_cal[0]

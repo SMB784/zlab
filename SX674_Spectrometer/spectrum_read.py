@@ -5,7 +5,7 @@ stop=630
 
 spectral_data=[]
 
-print(os.cwd())
+print()
 
 for root,dirs,files in os.walk(Path(data_root_directory+sub_folder)):
     dirs.sort(key=numerical_sort) # sorts directories by ascending number
@@ -20,7 +20,7 @@ for root,dirs,files in os.walk(Path(data_root_directory+sub_folder)):
         spectrum=pd.DataFrame(spectrum)
         window=find_max_window(spectrum)
         
-        print(data_root_directory+sub_folder+file)
+        print(Path(data_root_directory+sub_folder+file))
         
         spectrumArray=[[],[]]
         
@@ -52,7 +52,6 @@ for root,dirs,files in os.walk(Path(data_root_directory+sub_folder)):
 #         spectral_data.to_csv(Path(data_root_directory+sub_folder+save_folder+"spectrum"+str(file_count)+".csv"),header=None)
 #         spectrum.to_csv(Path(data_root_directory+sub_folder+save_folder+"rawDataFile"+str(file_count)+".csv"),header=None)
         file_count+=1
-    
-print(os.cwd())
+
 spectral_data=pd.DataFrame(spectral_data)
-#spectral_data.to_csv(os.cwd(),header=None)
+spectral_data.to_csv(Path(Path(os.getcwd())/(sub_folder+"spectral_data.csv")),index=False)
