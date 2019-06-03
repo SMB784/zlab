@@ -3,4 +3,4 @@ data/
 quickstart.py
 token*
 os*
-data*
+data
