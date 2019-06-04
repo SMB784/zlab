@@ -1,14 +1,24 @@
 from SX674_Spectrometer import *
 
+os.mkdir(Path(data_root_directory+sub_folder+save_folder))
+
 start=595
-stop=630
+stop=625
+
+# baseline=800.0 # No Binning
+baseline=1100.0 # 4x4 Binning
+trigger=1.2
+gate=10
+
+calibration=[543.26,0.13497] #4x4 binning
+# calibration=[543.741,0.068256] #No binning
 
 spectral_data=[]
 
-print()
-
-for root,dirs,files in os.walk(Path(data_root_directory+sub_folder)):
-    dirs.sort(key=numerical_sort) # sorts directories by ascending number
+exclude = set(['processed_data'])
+for root,dirs,files in os.walk(Path(data_root_directory+sub_folder),topdown=True):
+    dirs[:] = [d for d in dirs if d not in exclude]
+    #dirs.sort(key=numerical_sort) # sorts directories by ascending number
     file_count=0
 
     for file in sorted(files,key=numerical_sort): 
@@ -16,8 +26,8 @@ for root,dirs,files in os.walk(Path(data_root_directory+sub_folder)):
 
         hdul = fits.open(Path(data_root_directory+sub_folder)/file)
         #reads in data from file, converts to float type, drops first two and last columns (keep 2->len-1)
-        spectrum=hdul[0].data[:,2:len(hdul[0].data[0,:]-1)]
-        spectrum=pd.DataFrame(spectrum)
+        spectrum=pd.DataFrame(hdul[0].data[:,2:len(hdul[0].data[0,:]-1)])
+
         window=find_max_window(spectrum)
         
         print(Path(data_root_directory+sub_folder+file))
@@ -35,23 +45,20 @@ for root,dirs,files in os.walk(Path(data_root_directory+sub_folder)):
         lambdaStartIndex=input_data[input_data[[0]].apply(np.isclose,b=start,atol=tolerance).any(1)].index.tolist()[0]
         lambdaStopIndex=input_data[input_data[[0]].apply(np.isclose,b=stop,atol=tolerance).any(1)].index.tolist()[0]
 
-        wavelength=input_data.iloc[lambdaStartIndex:lambdaStopIndex,0].as_matrix()
-        amplitude=input_data.iloc[lambdaStartIndex:lambdaStopIndex,1].as_matrix()
+        wavelength=input_data.iloc[lambdaStartIndex:lambdaStopIndex,0].to_numpy()
+        amplitude=input_data.iloc[lambdaStartIndex:lambdaStopIndex,1].to_numpy()
         normalized_amplitude=(amplitude-amplitude.min())/(amplitude.max()-amplitude.min())
         
         if(file_count==0):
             spectral_data=wavelength
         
         spectral_data=np.c_[spectral_data,normalized_amplitude]
-        
+
 #         if(file_count==1):
 #             plt.plot(wavelength,normalized_amplitude)
 #             plt.show()
 #             break
-
-#         spectral_data.to_csv(Path(data_root_directory+sub_folder+save_folder+"spectrum"+str(file_count)+".csv"),header=None)
-#         spectrum.to_csv(Path(data_root_directory+sub_folder+save_folder+"rawDataFile"+str(file_count)+".csv"),header=None)
         file_count+=1
 
 spectral_data=pd.DataFrame(spectral_data)
-spectral_data.to_csv(Path(Path(os.getcwd())/(sub_folder+"spectral_data.csv")),index=False)
+spectral_data.to_csv(Path(Path(os.getcwd())/(sub_folder+save_folder+"spectral_data.csv")),index=False,header=None)
