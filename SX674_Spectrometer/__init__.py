@@ -6,11 +6,13 @@ from pathlib import Path
 from scipy import stats
 from lmfit import Model
 import os,re,io
-from google.auth.transport.requests import Request
-from googleapiclient.http import MediaIoBaseDownload
-from googleapiclient.discovery import build
-from httplib2 import Http
-from oauth2client import client, file, tools
+from pydrive.auth import GoogleAuth
+from pydrive.drive import GoogleDrive
+
+gauth=GoogleAuth()
+gauth.LocalWebserverAuth()
+drive=GoogleDrive(gauth)
+
 
 download_dir=Path(Path(os.getcwd())/"data/")
 
@@ -42,16 +44,15 @@ numbers=re.compile(r'(\d+)')
 
 
 def download_from_teamdrive():
-    creds=file.Storage('/home/sean/zlab/credentials.json').get()
-    drive_service=build('drive','v3',http=creds.authorize(Http()))
-    file_id = drive_URL.split("id=")[1]
-    request = drive_service.files().get_media(fileId=file_id)
-    fh = io.BytesIO()
-    downloader = MediaIoBaseDownload(fh, request)
-    done = False
-    while done is False:
-        status, done = downloader.next_chunk()
-        print("Download %d%%." % int(status.progress() * 100))   
+
+    file_list = drive.ListFile({'q': ''}).GetList() #"'root' in parents and trashed=false"
+    for file1 in file_list:
+        print('title: %s, id: %s' % (file1['title'], file1['id']))
+
+#     file_id = '0B-qQ_TcV3xHvTGFteU1GV09tejg'#drive_URL.split("id=")[1]
+#     print(file_id)
+#     drive_file=drive.CreateFile({'id':file_id})
+#     drive_file.GetContentFile(Path(download_dir/"test.csv"))
 
 def numerical_sort(value):
     parts=numbers.split(value)
