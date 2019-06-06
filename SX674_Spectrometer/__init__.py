@@ -45,7 +45,10 @@ numbers=re.compile(r'(\d+)')
 
 def download_from_teamdrive():
 
-    file_list = drive.ListFile({'q': ''}).GetList() #"'root' in parents and trashed=false"
+    file_list = drive.ListFile({'q': '','corpora': 'teamDrive',\
+                                'teamDriveId': '0AC8KtsHsd3AhUk9PVA',\
+                                'includeTeamDriveItems': 'true',\
+                                'supportsTeamDrives': 'true'}).GetList() #"'root' in parents and trashed=false"
     for file1 in file_list:
         print('title: %s, id: %s' % (file1['title'], file1['id']))
 
