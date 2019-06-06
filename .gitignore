@@ -2,5 +2,4 @@ data/
 *.json
 quickstart.py
 token*
-os*
-data
+credentials.txt
