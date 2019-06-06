@@ -19,7 +19,7 @@ for root,dirs,files in os.walk(Path(data_root_directory+sub_folder)):
         spectrum=hdul[0].data[:,2:len(hdul[0].data[0,:]-1)]
         spectrum=pd.DataFrame(spectrum)
         window=find_max_window(spectrum)
-        
+
         print(data_root_directory+sub_folder+file)
         
         spectrumArray=[[],[]]
@@ -28,7 +28,7 @@ for root,dirs,files in os.walk(Path(data_root_directory+sub_folder)):
             amplitude=np.mean(spectrum.loc[window[1][i]:window[0]+window[1][i],i])
             spectrumArray[0].append(np.float(calibration[0]+i*calibration[1]))
             spectrumArray[1].append(amplitude)
-        
+
         spectrumArray[1]=np.flip(spectrumArray[1])
         input_data=pd.DataFrame(np.transpose(spectrumArray),dtype=float)
 

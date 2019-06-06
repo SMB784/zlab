@@ -45,17 +45,18 @@ numbers=re.compile(r'(\d+)')
 
 def download_from_teamdrive():
 
+    file_id = drive_URL.split("id=")[1]
+
     file_list = drive.ListFile({'q': '','corpora': 'teamDrive',\
                                 'teamDriveId': '0AC8KtsHsd3AhUk9PVA',\
                                 'includeTeamDriveItems': 'true',\
                                 'supportsTeamDrives': 'true'}).GetList() #"'root' in parents and trashed=false"
-    for file1 in file_list:
-        print('title: %s, id: %s' % (file1['title'], file1['id']))
 
-#     file_id = '0B-qQ_TcV3xHvTGFteU1GV09tejg'#drive_URL.split("id=")[1]
-#     print(file_id)
-#     drive_file=drive.CreateFile({'id':file_id})
-#     drive_file.GetContentFile(Path(download_dir/"test.csv"))
+    for file in file_list:
+        print(file['id'])
+        if(file['id']==file_id):
+            drive_file=drive.CreateFile({'title':file['title'],'id':file['id'],'teamDriveId': '0AC8KtsHsd3AhUk9PVA','includeTeamDriveItems': 'true','supportsTeamDrives': 'true'})
+            drive_file.GetContentFile(Path(download_dir/file['title']))
 
 def numerical_sort(value):
     parts=numbers.split(value)
