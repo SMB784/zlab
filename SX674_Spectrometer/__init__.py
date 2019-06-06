@@ -10,9 +10,21 @@ from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive
 
 gauth=GoogleAuth()
-gauth.LocalWebserverAuth()
-drive=GoogleDrive(gauth)
 
+gauth.LoadCredentialsFile("credentials.txt")
+if gauth.credentials is None:
+    # Authenticate if they're not there
+    gauth.LocalWebserverAuth()
+elif gauth.access_token_expired:
+    # Refresh them if expired
+    gauth.Refresh()
+else:
+    # Initialize the saved creds
+    gauth.Authorize()
+# Save the current credentials to a file
+gauth.SaveCredentialsFile("credentials.txt")
+
+drive=GoogleDrive(gauth)
 
 download_dir=Path(Path(os.getcwd())/"data/")
 
@@ -45,17 +57,19 @@ numbers=re.compile(r'(\d+)')
 
 def download_from_teamdrive():
 
+    
     file_id = drive_URL.split("id=")[1]
 
-    file_list = drive.ListFile({'q': '','corpora': 'teamDrive',\
+    file_list = drive.ListFile({'q': '',\
+                                'corpora': 'teamDrive',\
                                 'teamDriveId': '0AC8KtsHsd3AhUk9PVA',\
-                                'includeTeamDriveItems': 'true',\
+                                'includeTeamDriveItems': True,\
                                 'supportsTeamDrives': 'true'}).GetList() #"'root' in parents and trashed=false"
 
     for file in file_list:
-        print(file['id'])
         if(file['id']==file_id):
-            drive_file=drive.CreateFile({'title':file['title'],'id':file['id'],'teamDriveId': '0AC8KtsHsd3AhUk9PVA','includeTeamDriveItems': 'true','supportsTeamDrives': 'true'})
+            drive_file=drive.CreateFile(file)
+            print(drive_file.GetPermissions())
             drive_file.GetContentFile(Path(download_dir/file['title']))
 
 def numerical_sort(value):
