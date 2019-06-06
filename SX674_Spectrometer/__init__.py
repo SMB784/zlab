@@ -72,6 +72,8 @@ def download_from_teamdrive():
             print(drive_file.GetPermissions())
             drive_file.GetContentFile(Path(download_dir/file['title']))
 
+download_from_teamdrive() # delete before finalizing merge
+
 def numerical_sort(value):
     parts=numbers.split(value)
     parts[1::2]=map(int,parts[1::2])
