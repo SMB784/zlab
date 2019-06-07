@@ -29,22 +29,21 @@ data_root_directory=Path(Path(os.getcwd())/"data/")
 
 save_folder='spectralData/'
 
+
 GeV=601
 tolerance=0.2
 
-baseline=800.0 # No Binning
-# baseline=1100.0 # 4x4 Binning
+# baseline=800.0 # No Binning
+baseline=1100.0 # 4x4 Binning
 trigger=1.2
 gate=10
 
-# calibration=[543.26,0.13497] #4x4 binning
-calibration=[543.741,0.068256] #No binning
+calibration=[543.26,0.13497] #4x4 binning
+# calibration=[543.741,0.068256] #No binning
 
-initial_fit=[[601.0,612,625],\
-             [4.5,11,40],\
-             [1,1,1],0]
+initial_fit=[]
 
-temp_cal=[0,0.008] # from center wavelength vs temp: [intercept, slope]
+temp_cal=[] # from center wavelength vs temp: [intercept, slope]
 
 numbers=re.compile(r'(\d+)')
 
@@ -125,15 +124,6 @@ def find_max_window(df):
         loc.append(y)
     return [np.max(y_window),loc]
 
-def tripleLorentzianFit(x,c1,c2,c3,\
-                w1,w2,w3,\
-                h1,h2,h3,\
-                o1):
-    return h1/(np.pi*w1)*(w1**2/((x-c1)**2+w1**2))\
-           +h2/(np.pi*w2)*(w2**2/((x-c2)**2+w2**2))\
-           +h3/(np.pi*w3)*(w3**2/((x-c3)**2+w3**2))\
-           +o1
-           
 def doubleLorentzianFit(x,c1,c2,\
                 w1,w2,\
                 h1,h2,\
@@ -142,10 +132,45 @@ def doubleLorentzianFit(x,c1,c2,\
            +h2/(np.pi*w2)*(w2**2/((x-c2)**2+w2**2))\
            +o1
 
+def lorentzianGaussianFit(x,c1,c2,\
+                          w1,w2,\
+                          h1,h2,\
+                          o1):
+    return h1/(np.pi*w1)*(w1**2/((x-c1)**2+w1**2))\
+           +h2/(w2*np.sqrt(2*np.pi))*np.exp(-(x-c2)**2/(2*w2**2))\
+           +o1
+
+def tripleLorentzianFit(x,c1,c2,c3,\
+                w1,w2,w3,\
+                h1,h2,h3,\
+                o1):
+    return h1/(np.pi*w1)*(w1**2/((x-c1)**2+w1**2))\
+           +h2/(np.pi*w2)*(w2**2/((x-c2)**2+w2**2))\
+           +h3/(np.pi*w3)*(w3**2/((x-c3)**2+w3**2))\
+           +o1
+
+def lorentzianDoubleGaussianFit(x,c1,c2,c3,\
+                                w1,w2,w3,\
+                                h1,h2,h3,\
+                                o1):
+    return h1/(np.pi*w1)*(w1**2/((x-c1)**2+w1**2))\
+           +h2/(w2*np.sqrt(2*np.pi))*np.exp(-(x-c2)**2/(2*w2**2))\
+           +h3/(w2*np.sqrt(2*np.pi))*np.exp(-(x-c3)**2/(2*w3**2))\
+           +o1
+
+def doubleLorentzianGaussianFit(x,c1,c2,c3,\
+                                w1,w2,w3,\
+                                h1,h2,h3,\
+                                o1):
+    return h1/(np.pi*w1)*(w1**2/((x-c1)**2+w1**2))\
+           +h2/(np.pi*w2)*(w2**2/((x-c2)**2+w2**2))\
+           +h3/(w3*np.sqrt(2*np.pi))*np.exp(-(x-c3)**2/(2*w3**2))\
+           +o1
+
 def findValue(bestValues): #input is dictionary output from result.best_values
     center_FWHM=[]
     for key, value in bestValues.items():
-        if np.isclose(a=value,b=GeV,atol=tolerance*20):
+        if np.isclose(a=value,b=GeV,atol=tolerance*10):
                 center_FWHM.append(value) # center wavelength
                 widthKey='w'+re.findall(r'\d+',key)[0]
                 center_FWHM.append(2*bestValues[widthKey]) # width
