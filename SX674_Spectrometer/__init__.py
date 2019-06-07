@@ -5,12 +5,30 @@ import matplotlib.pyplot as plt
 from pathlib import Path
 from scipy import stats
 from lmfit import Model
-import os,re
-import requests
+import os,re,io,sys
+from pydrive.auth import GoogleAuth
+from pydrive.drive import GoogleDrive
+import zipfile
 
-data_root_directory='/home/sean/zlab/SX674_Spectrometer/' # data directory goes here
-sub_folder='data/5-28-19/NewSpectrometer/900uW_300ms/' # data subfolder goes here
-save_folder='processed_data/'
+gauth=GoogleAuth()
+gauth.LoadCredentialsFile("credentials.txt")
+if gauth.credentials is None:
+    # Authenticate if they're not there
+    gauth.LocalWebserverAuth()
+elif gauth.access_token_expired:
+    # Refresh them if expired
+    gauth.Refresh()
+else:
+    # Initialize the saved creds
+    gauth.Authorize()
+# Save the current credentials to a file
+gauth.SaveCredentialsFile("credentials.txt")
+drive=GoogleDrive(gauth)
+
+data_root_directory=Path(Path(os.getcwd())/"data/")
+
+save_folder='spectralData/'
+
 
 GeV=601
 tolerance=0.2
@@ -28,6 +46,63 @@ initial_fit=[]
 temp_cal=[] # from center wavelength vs temp: [intercept, slope]
 
 numbers=re.compile(r'(\d+)')
+
+def find_directory(directory):
+    for root,dirs,files in os.walk(Path(data_root_directory)):
+        dirs.sort(key=numerical_sort)
+        dir_path=os.path.join(root,directory)
+        if(os.path.exists(dir_path)):
+            print("Directory found")
+            return dir_path
+    print("ERROR: No directory found, please choose an available directory.")
+    sys.exit()
+    return None
+
+def directory_exists(path):
+    for root,dirs,files in os.walk(Path(data_root_directory)):
+        dirs.sort(key=numerical_sort)
+        if(os.path.isdir(path)):
+            return True
+    return False
+
+def find_file(drive_URL):
+
+    file_id = drive_URL.split("id=")[1]
+
+    file_list = drive.ListFile({'q': '',\
+                                'corpora': 'teamDrive',\
+                                'teamDriveId': '0AC8KtsHsd3AhUk9PVA',\
+                                'includeItemsFromAllDrives': True,\
+                                'supportsAllDrives': True}).GetList()
+    
+    for file in file_list:
+        if(file['id']==file_id):
+            return file
+    return None
+
+def list_files(startpath):
+    for root, dirs, files in os.walk(startpath):
+        dirs.sort(key=numerical_sort)
+        level = root.replace(str(startpath), '').count(os.sep)
+        indent = ' ' * 4 * (level)
+        print('|->{}{}'.format(indent, os.path.basename(root)))
+        
+def directory_select(directory):
+    list_files(directory)
+    directory_selection=input("Please enter a bottom-level directory for analysis: ")
+    return directory_selection
+
+def download_from_teamdrive(file):
+
+    drive_file=drive.CreateFile(file)
+    downloaded_file=Path(data_root_directory/file['title'])
+    drive_file.GetContentFile(downloaded_file)
+
+    if(drive_file['title'].split(".")[1]=='zip'):
+        zip_ref=zipfile.ZipFile(downloaded_file,'r')
+        zip_ref.extractall(data_root_directory)
+        zip_ref.close()
+        os.remove(downloaded_file)
 
 def numerical_sort(value):
     parts=numbers.split(value)
@@ -100,3 +175,33 @@ def findValue(bestValues): #input is dictionary output from result.best_values
                 widthKey='w'+re.findall(r'\d+',key)[0]
                 center_FWHM.append(2*bestValues[widthKey]) # width
     return center_FWHM
+
+#drive_URL = "https://drive.google.com/open?id=1eR65LvN4WQiiEW5uGWzsY6CoNnzwoFn3"
+
+data_directory=''
+
+drive_URL=input("Please enter URL for TeamDrive data, or press ENTER to use existing data: ")
+
+print("Searching for data...")
+
+if(drive_URL==''):
+    print("Existing data found in these directories:\n")
+    data_directory=find_directory(directory_select(data_root_directory))
+else:
+
+    find_file=find_file(drive_URL)
+    
+    try:
+        download_dir=Path(data_root_directory/find_file['title'].split('.')[0])# names directory after the name of the file to be downloaded
+        
+        if directory_exists(download_dir)==False: # if directory with filename doesn't already exist, download file
+            print("Data located on TeamDrive, downloading data...")
+            download_from_teamdrive(find_file) # downloads the file, creates directory named after downloaded file
+            print("Data downloaded from TeamDrive to following directories:\n")
+            data_directory=find_directory(directory_select(data_root_directory)) # returns path of user selected directory
+        else:
+            print("Existing data from TeamDrive found in these directories:\n")
+            data_directory=find_directory(directory_select(data_root_directory))
+    except:
+        print("File not found on TeamDrive.  Check URL and run program again")
+        sys.exit()

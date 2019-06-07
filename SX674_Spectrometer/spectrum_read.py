@@ -16,7 +16,7 @@ calibration=[543.26,0.13497] #4x4 binning
 spectral_data=[]
 
 exclude = set(['processed_data'])
-for root,dirs,files in os.walk(Path(data_root_directory+sub_folder),topdown=True):
+for root,dirs,files in os.walk(data_directory,topdown=True):
     dirs[:] = [d for d in dirs if d not in exclude]
     #dirs.sort(key=numerical_sort) # sorts directories by ascending number
     file_count=0
@@ -24,13 +24,14 @@ for root,dirs,files in os.walk(Path(data_root_directory+sub_folder),topdown=True
     for file in sorted(files,key=numerical_sort): 
         files.sort(key=numerical_sort)
 
-        hdul = fits.open(Path(data_root_directory+sub_folder)/file)
+        hdul = fits.open(Path(data_directory)/file)
         #reads in data from file, converts to float type, drops first two and last columns (keep 2->len-1)
         spectrum=pd.DataFrame(hdul[0].data[:,2:len(hdul[0].data[0,:]-1)])
 
         window=find_max_window(spectrum)
-        
-        print(Path(data_root_directory+sub_folder+file))
+
+        print(Path(data_directory)/file)
+
         
         spectrumArray=[[],[]]
         
