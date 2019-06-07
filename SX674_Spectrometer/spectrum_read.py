@@ -1,11 +1,41 @@
 from SX674_Spectrometer import *
 
+drive_URL=input("Please enter URL for TeamDrive data, or press ENTER to use existing data: ")
+print("Searching for data...")
+if(drive_URL==''):
+    print("Existing data found in these directories:\n")
+    selection=directory_select(data_root_directory)
+
+else:
+
+    find_file=find_file(drive_URL)
+    
+    try:
+        download_dir=Path(data_root_directory/find_file['title'].split('.')[0])
+        
+        if find_directory(download_dir)==False:
+            print("Data located on TeamDrive, downloading data...")
+            download_from_teamdrive(find_file)
+            print("Data downloaded from TeamDrive to following directories:\n")
+            selection=directory_select(data_root_directory)
+        else:
+            print("Existing data from TeamDrive found in these directories:\n")
+            selection=directory_select(data_root_directory)
+    except:
+        print("File not found on TeamDrive.  Check URL and run program again")
+        sys.exit()    
+
+
+
+#drive_URL = "https://drive.google.com/open?id=1eR65LvN4WQiiEW5uGWzsY6CoNnzwoFn3"
+
+
+sub_folder='27000uW_250ms_NoBin/' # data subfolder goes here
+
 start=595
 stop=630
 
 spectral_data=[]
-
-download_from_teamdrive()
 
 for root,dirs,files in os.walk(Path(data_root_directory+sub_folder)):
     dirs.sort(key=numerical_sort) # sorts directories by ascending number
@@ -54,4 +84,3 @@ for root,dirs,files in os.walk(Path(data_root_directory+sub_folder)):
         file_count+=1
     
     spectral_data=pd.DataFrame(spectral_data)
-    print(spectral_data)

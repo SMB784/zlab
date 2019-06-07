@@ -5,12 +5,12 @@ import matplotlib.pyplot as plt
 from pathlib import Path
 from scipy import stats
 from lmfit import Model
-import os,re,io
+import os,re,io,sys
 from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive
+import zipfile
 
 gauth=GoogleAuth()
-
 gauth.LoadCredentialsFile("credentials.txt")
 if gauth.credentials is None:
     # Authenticate if they're not there
@@ -23,16 +23,10 @@ else:
     gauth.Authorize()
 # Save the current credentials to a file
 gauth.SaveCredentialsFile("credentials.txt")
-
 drive=GoogleDrive(gauth)
 
-download_dir=Path(Path(os.getcwd())/"data/")
+data_root_directory=Path(Path(os.getcwd())/"data/")
 
-drive_URL = "https://drive.google.com/open?id=1eR65LvN4WQiiEW5uGWzsY6CoNnzwoFn3"
-
-
-data_root_directory='/home/sean/Desktop/5-29-19/NewSpectrometer/' # data directory goes here
-sub_folder='27000uW_250ms_NoBin/' # data subfolder goes here
 save_folder='spectralData/'
 
 GeV=601
@@ -54,25 +48,50 @@ temp_cal=[0,0.008] # from center wavelength vs temp: [intercept, slope]
 
 numbers=re.compile(r'(\d+)')
 
+def find_directory(path):
+    for root,dirs,files in os.walk(Path(data_root_directory)):
+        if(os.path.exists(path)):
+            return True
+    return False
 
-def download_from_teamdrive():
+def find_file(drive_URL):
 
-    
     file_id = drive_URL.split("id=")[1]
 
     file_list = drive.ListFile({'q': '',\
                                 'corpora': 'teamDrive',\
                                 'teamDriveId': '0AC8KtsHsd3AhUk9PVA',\
-                                'includeTeamDriveItems': True,\
-                                'supportsTeamDrives': 'true'}).GetList() #"'root' in parents and trashed=false"
-
+                                'includeItemsFromAllDrives': True,\
+                                'supportsAllDrives': True}).GetList() #"'root' in parents and trashed=false"
+    
     for file in file_list:
         if(file['id']==file_id):
-            drive_file=drive.CreateFile(file)
-            print(drive_file.GetPermissions())
-            drive_file.GetContentFile(Path(download_dir/file['title']))
+            return file
+    return None
 
-download_from_teamdrive() # delete before finalizing merge
+def list_files(startpath):
+    for root, dirs, files in os.walk(startpath):
+        dirs.sort(key=numerical_sort)
+        level = root.replace(str(startpath), '').count(os.sep)
+        indent = ' ' * 4 * (level)
+        print('|->{}{}/'.format(indent, os.path.basename(root)))
+        
+def directory_select(directory):
+    list_files(directory)
+    directory_selection=input("Please enter a bottom-level directory for analysis: ")
+    return directory_selection
+
+def download_from_teamdrive(file):
+
+    drive_file=drive.CreateFile(file)
+    downloaded_file=Path(data_root_directory/file['title'])
+    drive_file.GetContentFile(downloaded_file)
+
+    if(drive_file['title'].split(".")[1]=='zip'):
+        zip_ref=zipfile.ZipFile(downloaded_file,'r')
+        zip_ref.extractall(data_root_directory)
+        zip_ref.close()
+        os.remove(downloaded_file)
 
 def numerical_sort(value):
     parts=numbers.split(value)
