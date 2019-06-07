@@ -1,21 +1,24 @@
 from SX674_Spectrometer import *
 
-os.mkdir(Path(data_root_directory+sub_folder+save_folder))
+save_folder='processed_data/'
+data_filename='spectral_data.csv'
+os.mkdir(Path(Path(data_directory)/save_folder))
 
 start=595
 stop=625
 
-# baseline=800.0 # No Binning
-baseline=1100.0 # 4x4 Binning
+baseline=800.0 # No Binning
+calibration=[543.741,0.068256] #No binning
+
+# baseline=1100.0 # 4x4 Binning
+# calibration=[543.26,0.13497] #4x4 binning
+
 trigger=1.2
 gate=10
 
-calibration=[543.26,0.13497] #4x4 binning
-# calibration=[543.741,0.068256] #No binning
-
 spectral_data=[]
 
-exclude = set(['processed_data'])
+exclude = set([save_folder])
 for root,dirs,files in os.walk(data_directory,topdown=True):
     dirs[:] = [d for d in dirs if d not in exclude]
     #dirs.sort(key=numerical_sort) # sorts directories by ascending number
@@ -62,4 +65,4 @@ for root,dirs,files in os.walk(data_directory,topdown=True):
         file_count+=1
 
 spectral_data=pd.DataFrame(spectral_data)
-spectral_data.to_csv(Path(Path(os.getcwd())/(sub_folder+save_folder+"spectral_data.csv")),index=False,header=None)
+spectral_data.to_csv(Path(Path(data_directory)/(save_folder+data_filename)),index=False,header=None)
