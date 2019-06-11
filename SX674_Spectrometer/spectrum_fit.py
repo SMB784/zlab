@@ -1,10 +1,12 @@
 from SX674_Spectrometer import *
 
 try:
-    input_data=pd.read_csv(Path(Path(os.getcwd())/(sub_folder+save_folder+"spectral_data.csv")),header=None)
+    input_data=pd.read_csv(find_directory(Path(Path(data_directory)/save_directory)),header=None)
 except:
     from SX674_Spectrometer import spectrum_read
     input_data=spectrum_read.spectral_data
+    spectrum_read.spectral_data.to_csv(Path(Path(data_directory)\
+                                            /(save_directory+processed_data_filename)),index=False,header=None)
 
 lmodel=Model(lorentzianGaussianFit)
 
@@ -62,12 +64,9 @@ fit_curves=pd.DataFrame(fit_curves)
 fit_values=pd.DataFrame(fit_values)
 temp_values=pd.DataFrame(temp_values)
 
-fit_curves.to_csv(Path(Path(os.getcwd())\
-                       /(sub_folder+save_folder+"fit_curves.csv")),\
+fit_curves.to_csv(Path(Path(data_directory)/(save_directory+"fit_curves.csv")),\
                        index=False,header=None)
-fit_values.to_csv(Path(Path(os.getcwd())\
-                       /(sub_folder+save_folder+"fit_values.csv")),\
+fit_values.to_csv(Path(Path(data_directory)/(save_directory+"fit_values.csv")),\
                        index=False,header=None)
-temp_values.to_csv(Path(Path(os.getcwd())\
-                       /(sub_folder+save_folder+"temp_values.csv")),\
+temp_values.to_csv(Path(Path(data_directory)/(save_directory+"temp_values.csv")),\
                        index=False,header=None)

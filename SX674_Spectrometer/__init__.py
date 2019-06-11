@@ -28,7 +28,8 @@ drive=GoogleDrive(gauth)
 
 data_root_directory=Path(Path(os.getcwd())/"data/")
 
-save_folder='spectralData/'
+save_directory='processed_data/'
+processed_data_filename='spectral_data.csv'
 
 
 GeV=601
@@ -53,18 +54,19 @@ def find_directory(directory):
         dirs.sort(key=numerical_sort)
         dir_path=os.path.join(root,directory)
         if(os.path.exists(dir_path)):
-            print("Directory found")
+            print("\n"+str(dir_path)+" directory found\n")
             return dir_path
-    print("ERROR: No directory found, please choose an available directory.")
-    sys.exit()
     return None
 
 def directory_exists(path):
-    for root,dirs,files in os.walk(Path(data_root_directory)):
-        dirs.sort(key=numerical_sort)
-        if(os.path.isdir(path)):
-            return True
-    return False
+    try:
+        for root,dirs,files in os.walk(Path(data_root_directory)):
+            dirs.sort(key=numerical_sort)
+            if(os.path.isdir(path)):
+                return True
+        return False
+    except:
+        return False
 
 def find_file(drive_URL):
 
