@@ -205,6 +205,7 @@ else:
         else:
             print("Existing data from TeamDrive found in these directories:\n")
             data_directory=find_directory(directory_select(data_root_directory))
-    except:
+    except Exception:
         print("File not found on TeamDrive.  Check URL and run program again")
+        print(Exception)
         sys.exit()

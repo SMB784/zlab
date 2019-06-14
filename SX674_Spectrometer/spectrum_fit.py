@@ -14,7 +14,7 @@ initial_fit=[[601.0,612,625],\
              [4.5,11,40],\
              [1,1,1],0]
 
-temp_cal=[0,0.008] # from center wavelength vs temp: [intercept, slope]
+temp_cal=[601.007,0.0078] # from center wavelength vs temp: [intercept, slope]
 
 # lmodel.set_param_hint('c1',min=600,max=602)
 lmodel.set_param_hint('c2',min=605,max=620)
@@ -45,10 +45,7 @@ for i in range(1,len(input_data.columns)):
     
     fit_values.append(findValue(result.best_values))
     
-    if(i==1):
-        init_temp=findValue(result.best_values)[0]/temp_cal[1]+temp_cal[0]
-        temp_values.append(init_temp)
-    temp_value=findValue(result.best_values)[0]/temp_cal[1]-init_temp
+    temp_value=(findValue(result.best_values)[0]-temp_cal[0])/temp_cal[1]
     temp_values.append(temp_value)
 
 #     plt.plot(input_data[0],input_data[i])
@@ -59,7 +56,6 @@ for i in range(1,len(input_data.columns)):
 # plt.show()
 
 temp_stdev=np.std(np.transpose(temp_values)[1:len(np.transpose(temp_values))])
-temp_values.append(temp_stdev)
 
 fit_curves=pd.DataFrame(fit_curves)
 fit_values=pd.DataFrame(fit_values)
