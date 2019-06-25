@@ -1,7 +1,7 @@
 from SX674_Spectrometer import *
 
-start=595
-stop=625
+start=545
+stop=675
 
 baseline=800.0 # No Binning
 calibration=[543.741,0.068256] #No binning
@@ -46,7 +46,7 @@ else:
     
             spectrumArray[1]=np.flip(spectrumArray[1],axis=0)
             input_data=pd.DataFrame(np.transpose(spectrumArray),dtype=float)
-    
+            
             lambdaStartIndex=input_data[input_data[[0]].apply(np.isclose,b=start,atol=tolerance).any(1)].index.tolist()[0]
             lambdaStopIndex=input_data[input_data[[0]].apply(np.isclose,b=stop,atol=tolerance).any(1)].index.tolist()[0]
     

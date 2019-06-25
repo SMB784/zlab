@@ -10,13 +10,18 @@ import sys
 fontsize=16
 plt.rcParams.update({'font.size':fontsize})
 grid=plt.GridSpec(2,4)
+
 fig,ax=plt.subplots(figsize=(12,6))
 ax.axis('off')
 
-trace62mW=pd.read_csv('/media/sean/Storage/zlab/SX674_Spectrometer/data/5-29-19/NewSpectrometer/62000uW_125ms_NoBin/processed_data/temp_values.csv',header=None)
-trace27mW=pd.read_csv('/media/sean/Storage/zlab/SX674_Spectrometer/data/5-29-19/NewSpectrometer/27000uW_250ms_NoBin/processed_data/temp_values.csv',header=None)
-trace12mW=pd.read_csv('/media/sean/Storage/zlab/SX674_Spectrometer/data/5-29-19/NewSpectrometer/12500uW_500ms_NoBin/processed_data/temp_values.csv',header=None)
-trace6mW=pd.read_csv('/media/sean/Storage/zlab/SX674_Spectrometer/data/5-29-19/NewSpectrometer/6000uW_1000ms_NoBin/processed_data/temp_values.csv',header=None)
+trace62mW=pd.read_csv('/media/sean/Storage/zlab/SX674_Spectrometer/data/5-29-19/NewSpectrometer/62000uW_125ms_NoBin/processed_data/ratio_temp_values.csv',header=None)
+trace27mW=pd.read_csv('/media/sean/Storage/zlab/SX674_Spectrometer/data/5-29-19/NewSpectrometer/27000uW_250ms_NoBin/processed_data/ratio_temp_values.csv',header=None)
+trace12mW=pd.read_csv('/media/sean/Storage/zlab/SX674_Spectrometer/data/5-29-19/NewSpectrometer/12500uW_500ms_NoBin/processed_data/ratio_temp_values.csv',header=None)
+trace6mW=pd.read_csv('/media/sean/Storage/zlab/SX674_Spectrometer/data/5-29-19/NewSpectrometer/6000uW_1000ms_NoBin/processed_data/ratio_temp_values.csv',header=None)
+trace62mW=pd.read_csv('/media/sean/Storage/zlab/SX674_Spectrometer/data/5-29-19/NewSpectrometer/62000uW_125ms_NoBin/processed_data/ratio_temp_values.csv',header=None)
+trace27mW=pd.read_csv('/media/sean/Storage/zlab/SX674_Spectrometer/data/5-29-19/NewSpectrometer/27000uW_250ms_NoBin/processed_data/ratio_temp_values.csv',header=None)
+trace12mW=pd.read_csv('/media/sean/Storage/zlab/SX674_Spectrometer/data/5-29-19/NewSpectrometer/12500uW_500ms_NoBin/processed_data/ratio_temp_values.csv',header=None)
+trace6mW=pd.read_csv('/media/sean/Storage/zlab/SX674_Spectrometer/data/5-29-19/NewSpectrometer/6000uW_1000ms_NoBin/processed_data/ratio_temp_values.csv',header=None)
 
 fft62mW=trace62mW
 fft27mW=trace27mW
@@ -53,10 +58,10 @@ for i in range(0,len(res_array)):
     
     ax0=fig.add_subplot(grid[0,i])
     ax0.set_xlabel("Time (sec)")
-    ax0.set_ylim(20,33)
+    ax0.set_ylim(temp-5,temp+5)
     patches=[ax0.plot([],[],marker='o',ms=20,ls="",mec=None,color=colors[i],label="{:s}".format(texts[i]))[0]]
 
-    
+    print(trace_array[i])
     ax0.plot(times,avgs,color='black')
     ax0.plot(times,plus_stdev,color='black',ls='dashed')
     ax0.plot(times,minus_stdev,color='black',ls='dashed')
@@ -66,13 +71,16 @@ for i in range(0,len(res_array)):
 
     ax1.set_xlabel("Frequency (Hz)")
     ax1.set_xlim(0.1,10)
-    ax1.set_ylim(0.1,10)
+    ax1.set_ylim(0.1,100)
     ax1.loglog(freqs[0:samples//2],ffts[0:samples//2],color=colors[i])
     ax1.get_xaxis().set_major_formatter(mpl.ticker.ScalarFormatter())
     ax1.get_yaxis().set_major_formatter(mpl.ticker.ScalarFormatter())
     ax1.yaxis.set_major_formatter(FormatStrFormatter('%.1f'))
     xticks=ax1.get_xticks()
     ax1.set_xticklabels(xticks.astype(int))
+
+    ax0.grid(b=True,which='both',axis='both')
+    ax1.grid(b=True,which='both',axis='both')
 
     if i!=0:
         ax0.legend(handles=patches,loc='upper right')
@@ -84,5 +92,5 @@ for i in range(0,len(res_array)):
         ax1.set_ylabel("Resolution (C)")
 
 plt.tight_layout()
-plt.savefig('/media/sean/Storage/zlab/SX674_Spectrometer/data/5-29-19/NewSpectrometer/noiseData.png',bbox_inches='tight')
+plt.savefig('/media/sean/Storage/zlab/SX674_Spectrometer/data/5-29-19/NewSpectrometer/ratio_noise_data.png',bbox_inches='tight')
 plt.show()

@@ -4,6 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from pathlib import Path
 from scipy import stats
+from scipy.integrate import simps
 from lmfit import Model
 import os,re,io,sys
 from pydrive.auth import GoogleAuth
