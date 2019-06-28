@@ -61,9 +61,11 @@ else:
     
             if(file_count==1):
                 plt.plot(wavelength,normalized_amplitude)
-                plt.show()
+                plt.xlim(600,603)
+                plt.ylim(0.95,1)
                 break
             file_count+=1
     
-    spectral_data=pd.DataFrame(spectral_data)
-    spectral_data.to_csv(Path(Path(data_directory)/(save_directory+processed_data_filename)),index=False,header=None)
+#     spectral_data=pd.DataFrame(spectral_data)
+#     spectral_data.to_csv(Path(Path(data_directory)/(save_directory+processed_data_filename)),index=False,header=None)
+plt.show()
