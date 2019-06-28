@@ -59,7 +59,7 @@ else:
             
             spectral_data=np.c_[spectral_data,normalized_amplitude]
     
-            if(file_count==1):
+            if(file_count==0):
                 plt.plot(wavelength,normalized_amplitude)
                 plt.xlim(600,603)
                 plt.ylim(0.95,1)
