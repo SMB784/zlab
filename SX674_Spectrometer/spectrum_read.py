@@ -59,10 +59,10 @@ else:
             
             spectral_data=np.c_[spectral_data,normalized_amplitude]
     
-    #         if(file_count==1):
-    #             plt.plot(wavelength,normalized_amplitude)
-    #             plt.show()
-    #             break
+            if(file_count==1):
+                plt.plot(wavelength,normalized_amplitude)
+                plt.show()
+                break
             file_count+=1
     
     spectral_data=pd.DataFrame(spectral_data)
