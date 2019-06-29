@@ -2,14 +2,18 @@ from astropy.io import fits
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib as mpl
+from matplotlib.ticker import FormatStrFormatter
 from pathlib import Path
 from scipy import stats
+from scipy import fftpack
 from scipy.integrate import simps
 from lmfit import Model
 import os,re,io,sys
 from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive
 import zipfile
+
 
 
 gauth=GoogleAuth()
@@ -114,12 +118,11 @@ def find_max_window(df):
     for i in range(0,len(df.columns)-2):
 
         vals=df[i].values
-        baseline=np.mean(df[i].values[100:150])
+        baseline=np.mean(df[i].values[0:150])
         maximum=np.max(vals)
         trigger=(maximum-baseline)/2
         vals=vals-baseline
-
-        print(np.max(vals))
+        
         try:
             y_min=np.min(np.argwhere(vals>=trigger))
             y_window.append(np.min(np.argwhere(vals[y_min:len(vals)]<=trigger)))
@@ -128,7 +131,6 @@ def find_max_window(df):
 #             print("y_max: "+str(y_min+np.min(np.argwhere(vals[y_min:len(vals)]<=baseline*trigger))))
 #             print("window: "+str(np.min(np.argwhere(vals[y_min:len(vals)]<=baseline*trigger)))+"\n")
         except ValueError:  #raised if `y` is empty.
-            print("in except")
             y_min=0
             y_window.append(0)
 #             print("Column: "+str(i))

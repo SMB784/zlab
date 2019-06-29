@@ -1,11 +1,5 @@
-import numpy as np
-import pandas as pd
-from matplotlib.ticker import FormatStrFormatter
-import matplotlib.pyplot as plt
-from scipy import fftpack
-from scipy import stats
-import matplotlib as mpl
-import sys
+from SX674_Spectrometer import *
+import SX674_Spectrometer
 
 fontsize=16
 plt.rcParams.update({'font.size':fontsize})
