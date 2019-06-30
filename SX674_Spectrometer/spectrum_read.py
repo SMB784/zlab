@@ -54,8 +54,8 @@ else:
             spectrumArray=[[],[]]
             
             for i in range(0,len(spectrum.columns)-2): # -1 cuts last datapoint because it is erroneous
-                amplitude=np.max(spectrum.loc[window[1][i]:window[0][i]+window[1][i],i])
-#                 amplitude=np.sum(spectrum[i].to_numpy())
+#                 amplitude=np.max(spectrum.loc[window[1][i]:window[0][i]+window[1][i],i])
+                amplitude=np.sum(spectrum[i].to_numpy())
 
                 spectrumArray[0].append(np.float(calibration[0]+i*calibration[1]))
                 spectrumArray[1].append(amplitude)

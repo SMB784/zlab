@@ -8,14 +8,14 @@ grid=plt.GridSpec(2,4)
 fig,ax=plt.subplots(figsize=(12,6))
 ax.axis('off')
 
-ratio_trace62mW=pd.read_csv('/media/sean/Storage/zlab/SX674_Spectrometer/data/5-29-19/NewSpectrometer/62000uW_125ms_NoBin/processed_data/ratio_temp_values.csv',header=None)
-ratio_trace27mW=pd.read_csv('/media/sean/Storage/zlab/SX674_Spectrometer/data/5-29-19/NewSpectrometer/27000uW_250ms_NoBin/processed_data/ratio_temp_values.csv',header=None)
-ratio_trace12mW=pd.read_csv('/media/sean/Storage/zlab/SX674_Spectrometer/data/5-29-19/NewSpectrometer/12500uW_500ms_NoBin/processed_data/ratio_temp_values.csv',header=None)
-ratio_trace6mW=pd.read_csv('/media/sean/Storage/zlab/SX674_Spectrometer/data/5-29-19/NewSpectrometer/6000uW_1000ms_NoBin/processed_data/ratio_temp_values.csv',header=None)
-fit_trace62mW=pd.read_csv('/media/sean/Storage/zlab/SX674_Spectrometer/data/5-29-19/NewSpectrometer/62000uW_125ms_NoBin/processed_data/fit_temp_values.csv',header=None)
-fit_trace27mW=pd.read_csv('/media/sean/Storage/zlab/SX674_Spectrometer/data/5-29-19/NewSpectrometer/27000uW_250ms_NoBin/processed_data/fit_temp_values.csv',header=None)
-fit_trace12mW=pd.read_csv('/media/sean/Storage/zlab/SX674_Spectrometer/data/5-29-19/NewSpectrometer/12500uW_500ms_NoBin/processed_data/fit_temp_values.csv',header=None)
-fit_trace6mW=pd.read_csv('/media/sean/Storage/zlab/SX674_Spectrometer/data/5-29-19/NewSpectrometer/6000uW_1000ms_NoBin/processed_data/fit_temp_values.csv',header=None)
+ratio_trace62mW=pd.read_csv('/home/sean/zlab/SX674_Spectrometer/data/5-29-19/NewSpectrometer/62000uW_125ms_NoBin/processed_data/ratio_temp_values.csv',header=None)
+ratio_trace27mW=pd.read_csv('/home/sean/zlab/SX674_Spectrometer/data/5-29-19/NewSpectrometer/27000uW_250ms_NoBin/processed_data/ratio_temp_values.csv',header=None)
+ratio_trace12mW=pd.read_csv('/home/sean/zlab/SX674_Spectrometer/data/5-29-19/NewSpectrometer/12500uW_500ms_NoBin/processed_data/ratio_temp_values.csv',header=None)
+ratio_trace6mW=pd.read_csv('/home/sean/zlab/SX674_Spectrometer/data/5-29-19/NewSpectrometer/6000uW_1000ms_NoBin/processed_data/ratio_temp_values.csv',header=None)
+fit_trace62mW=pd.read_csv('/home/sean/zlab/SX674_Spectrometer/data/5-29-19/NewSpectrometer/62000uW_125ms_NoBin/processed_data/fit_temp_values.csv',header=None)
+fit_trace27mW=pd.read_csv('/home/sean/zlab/SX674_Spectrometer/data/5-29-19/NewSpectrometer/27000uW_250ms_NoBin/processed_data/fit_temp_values.csv',header=None)
+fit_trace12mW=pd.read_csv('/home/sean/zlab/SX674_Spectrometer/data/5-29-19/NewSpectrometer/12500uW_500ms_NoBin/processed_data/fit_temp_values.csv',header=None)
+fit_trace6mW=pd.read_csv('/home/sean/zlab/SX674_Spectrometer/data/5-29-19/NewSpectrometer/6000uW_1000ms_NoBin/processed_data/fit_temp_values.csv',header=None)
 
 ratio_fft62mW=ratio_trace62mW
 ratio_fft27mW=ratio_trace27mW
@@ -100,5 +100,5 @@ for i in range(0,len(ratio_res_array)):
         ax1.set_ylabel("Resolution (C)")
 
 plt.tight_layout()
-plt.savefig('/media/sean/Storage/zlab/SX674_Spectrometer/data/5-29-19/NewSpectrometer/fig5.png',bbox_inches='tight')
+plt.savefig('/home/sean/zlab/SX674_Spectrometer/data/5-29-19/NewSpectrometer/fig5.png',bbox_inches='tight')
 plt.show()
