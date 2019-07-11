@@ -1,13 +1,13 @@
 from SX674_Spectrometer import *
 
 start=545
-stop=675
+stop=673
 
-baseline=800.0 # No Binning
-calibration=[543.741,0.068256] #No binning
+# baseline=800.0 # No Binning
+# calibration=[543.741,0.068256] #No binning
 
-# baseline=1100.0 # 4x4 Binning
-# calibration=[543.26,0.13497] #4x4 binning
+baseline=1100.0 # 4x4 Binning
+calibration=[543.26,0.13497] #4x4 binning
 
 trigger=1.2
 gate=10
@@ -64,6 +64,6 @@ else:
     #             plt.show()
     #             break
             file_count+=1
-    
+
     spectral_data=pd.DataFrame(spectral_data)
     spectral_data.to_csv(Path(Path(data_directory)/(save_directory+processed_data_filename)),index=False,header=None)

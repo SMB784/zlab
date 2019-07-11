@@ -17,18 +17,18 @@ initial_fit=[[601.0,612,625],\
              [4.5,11,40],\
              [1,1,1],0]
 
-temp_cal=[601.007,0.0078] # from center wavelength vs temp: [intercept, slope]
+temp_cal=[599.6316,0.0078] # from center wavelength vs temp: [intercept, slope]
 
 start=585
 stop=630
 tolerance=0.3
 
-# lmodel.set_param_hint('c1',min=600,max=602)
-lmodel.set_param_hint('c2',min=605,max=625)
+lmodel.set_param_hint('c1',min=598,max=605)
+lmodel.set_param_hint('c2',min=610,max=630)
 lmodel.set_param_hint('c3',min=605,max=630)
         
 lmodel.set_param_hint('w1',min=0)
-lmodel.set_param_hint('w2',min=9,max=20)
+lmodel.set_param_hint('w2',min=5,max=20)
 lmodel.set_param_hint('w3',min=0,max=50)
                 
 params=lmodel.make_params(c1=initial_fit[0][0],w1=initial_fit[1][0],h1=initial_fit[2][0],\
@@ -66,18 +66,20 @@ for i in range(1,len(input_data.columns)):
 #     # Comment out this code block to suppress plotting data
 #     plt.plot(wavelength,normalized_amplitude)
 #     plt.plot(wavelength,result.best_fit,ls='dashed')
-#     if(file_count>2):
+#     if(file_count==0):
 #         break
+# 
 #     file_count+=1
 # plt.show()
 
 # Comment out this block to suppress data writing to disk
 temp_stdev=np.std(np.transpose(temp_values)[1:len(np.transpose(temp_values))])
-  
+print(temp_stdev)
+    
 fit_curves=pd.DataFrame(fit_curves)
 fit_values=pd.DataFrame(fit_values)
 temp_values=pd.DataFrame(temp_values)
-  
+    
 fit_curves.to_csv(Path(Path(data_directory)/(save_directory+"fit_curves.csv")),\
                        index=False,header=None)
 fit_values.to_csv(Path(Path(data_directory)/(save_directory+"fit_values.csv")),\
