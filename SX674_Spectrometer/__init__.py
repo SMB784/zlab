@@ -13,6 +13,7 @@ import os,re,io,sys
 from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive
 import zipfile
+import traceback
 
 
 
@@ -210,7 +211,7 @@ else:
         else:
             print("Existing data from TeamDrive found in these directories:\n")
             data_directory=find_directory(directory_select(data_root_directory))
-    except Exception:
+    except:
         print("File not found on TeamDrive.  Check URL and run program again")
-        print(Exception)
+        traceback.print_exc()
         sys.exit()

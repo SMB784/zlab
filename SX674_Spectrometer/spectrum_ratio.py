@@ -12,7 +12,7 @@ except:
                                             index=False,header=None)
 
 start=575
-stop=673.5
+stop=673
 crit=607
 tolerance=0.3
 

@@ -5,10 +5,16 @@ from scipy import fftpack
 ax=plt.gca()
 
 start=545
-stop=673.5
+stop=673
 
+# baseline=800.0 # No Binning
 # calibration=[543.741,0.068256] #No binning
+
+baseline=1100.0 # 4x4 Binning
 calibration=[543.26,0.13497] #4x4 binning
+
+trigger=1.2
+gate=10
 
 spectral_data=[]
 
