@@ -2,13 +2,15 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib as mpl
-
+from SX674_Spectrometer import *
+import SX674_Spectrometer
 
 fontsize=16
 plt.rcParams.update({'font.size':fontsize})
 grid=plt.GridSpec(2,2)
 
 fig,ax=plt.subplots(figsize=(12,6))
+
 
 ax.set_ylabel("Temperature (C)")
 ax.yaxis.set_label_coords(-0.0625,0.5)
