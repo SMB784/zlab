@@ -23,7 +23,7 @@ start=585
 stop=630
 tolerance=0.3
 
-# lmodel.set_param_hint('c1',min=600,max=602)
+lmodel.set_param_hint('c1',min=599,max=605)
 lmodel.set_param_hint('c2',min=605,max=625)
 lmodel.set_param_hint('c3',min=605,max=630)
         
@@ -73,11 +73,12 @@ for i in range(1,len(input_data.columns)):
 
 # Comment out this block to suppress data writing to disk
 temp_stdev=np.std(np.transpose(temp_values)[1:len(np.transpose(temp_values))])
+print(temp_stdev)
   
 fit_curves=pd.DataFrame(fit_curves)
 fit_values=pd.DataFrame(fit_values)
 temp_values=pd.DataFrame(temp_values)
-  
+    
 fit_curves.to_csv(Path(Path(data_directory)/(save_directory+"fit_curves.csv")),\
                        index=False,header=None)
 fit_values.to_csv(Path(Path(data_directory)/(save_directory+"fit_values.csv")),\

@@ -40,8 +40,8 @@ processed_data_filename='spectral_data.csv'
 GeV=601
 tolerance=0.2
 
-# calibration=[543.26,0.13497] #4x4 binning
-calibration=[543.741,0.068256] #No binning
+calibration=[543.26,0.13497] #4x4 binning
+# calibration=[543.741,0.068256] #No binning
 
 initial_fit=[]
 
@@ -126,17 +126,9 @@ def find_max_window(df):
         try:
             y_min=np.min(np.argwhere(vals>=trigger))
             y_window.append(np.min(np.argwhere(vals[y_min:len(vals)]<=trigger)))
-#             print("Column: "+str(i))
-#             print("y_min: "+str(y_min))
-#             print("y_max: "+str(y_min+np.min(np.argwhere(vals[y_min:len(vals)]<=baseline*trigger))))
-#             print("window: "+str(np.min(np.argwhere(vals[y_min:len(vals)]<=baseline*trigger)))+"\n")
         except ValueError:  #raised if `y` is empty.
             y_min=0
             y_window.append(0)
-#             print("Column: "+str(i))
-#             print("y_min: "+str(y_min))
-#             print("y_max: "+str(y_min))
-#             print("window: "+str(0)+"\n")
         loc.append(y_min)
     return [y_window,loc]
 

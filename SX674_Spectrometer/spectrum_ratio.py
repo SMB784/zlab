@@ -12,7 +12,7 @@ except:
                                             index=False,header=None)
 
 start=575
-stop=675
+stop=673.5
 crit=607
 tolerance=0.3
 
@@ -41,6 +41,8 @@ for i in range(1,len(input_data.columns)):
     temp_values.append((ratio-temp_cal[0])/temp_cal[1])
 
 temp_values=temp_values-np.min(temp_values)
+print(np.std(temp_values))
+
 temp_values=pd.DataFrame(temp_values)
 
 temp_values.to_csv(Path(Path(data_directory)/(save_directory+"ratio_temp_values.csv")),\
