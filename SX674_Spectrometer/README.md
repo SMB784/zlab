@@ -23,6 +23,7 @@
   - ###### Configure interpreter (choose First in Path)
   - ###### Select Open Perspective (remember your decision)
 - #### Configure EGit for github integration (follow this video: https://www.youtube.com/watch?v=ptK9-CNms98)
-## 4. Configure PyDrive (follow steps here: https://pythonhosted.org/PyDrive/quickstart.html)
-- #### Save client_secrets.json in */git/zlab/SX674_Spectrometer directory
+- #### Configure PyDrive (follow steps here: https://pythonhosted.org/PyDrive/quickstart.html)
+  - ###### Save client_secrets.json in */git/zlab/SX674_Spectrometer directory
+  - ###### Run patcher to fix files.py
 
