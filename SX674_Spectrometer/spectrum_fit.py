@@ -5,7 +5,8 @@ try:
                                                /(save_directory+processed_data_filename))),\
                                                header=None)
 except:
-    from SX674_Spectrometer import spectrum_read
+    from SX674_Specutrometer import spectrum_read
+    
     input_data=spectrum_read.spectral_data
     spectrum_read.spectral_data.to_csv(Path(Path(data_directory)\
                                             /(save_directory+processed_data_filename)),\
