@@ -22,14 +22,14 @@ ax.spines['bottom'].set_visible(False)
 ax.xaxis.set_ticks([])
 ax.yaxis.set_ticks([])
 
-fit_trace62mW=pd.read_csv('/media/sean/Storage/zlab/SX674_Spectrometer/data/5-28-19/NewSpectrometer/62000uW_5ms/processed_data/fit_temp_values.csv',header=None)
-fit_trace27mW=pd.read_csv('/media/sean/Storage/zlab/SX674_Spectrometer/data/5-28-19/NewSpectrometer/27000uW_10ms/processed_data/fit_temp_values.csv',header=None)
-fit_trace12mW=pd.read_csv('/media/sean/Storage/zlab/SX674_Spectrometer/data/5-28-19/NewSpectrometer/12000uW_20ms/processed_data/fit_temp_values.csv',header=None)
-fit_trace6mW=pd.read_csv('/media/sean/Storage/zlab/SX674_Spectrometer/data/5-28-19/NewSpectrometer/2800uW_100ms/processed_data/fit_temp_values.csv',header=None)
+fit_trace62mW=pd.read_csv('/home/sean/git/zlab/SX674_Spectrometer/data/5-28-19/NewSpectrometer/62000uW_5ms/processed_data/fit_temp_values.csv',header=None)
+fit_trace27mW=pd.read_csv('/home/sean/git/zlab/SX674_Spectrometer/data/5-28-19/NewSpectrometer/27000uW_10ms/processed_data/fit_temp_values.csv',header=None)
+fit_trace12mW=pd.read_csv('/home/sean/git/zlab/SX674_Spectrometer/data/5-28-19/NewSpectrometer/12000uW_20ms/processed_data/fit_temp_values.csv',header=None)
+fit_trace6mW=pd.read_csv('/home/sean/git/zlab/SX674_Spectrometer/data/5-28-19/NewSpectrometer/2800uW_100ms/processed_data/fit_temp_values.csv',header=None)
 
 time_increment=[.005,.01,.02,.1]
 power_increment=[62,27,12,3]
-temp=22
+temp=34
 
 fit_trace_array=(fit_trace62mW[0].to_numpy()+temp,fit_trace27mW[0].to_numpy()+temp,\
            fit_trace12mW[0].to_numpy()+temp,fit_trace6mW[0].to_numpy()+temp)
@@ -86,5 +86,5 @@ ax0_1.annotate('(a)', xy=(-0.2, 1), xycoords='axes fraction')
 ax1.annotate('(b)', xy=(-0.2, 1), xycoords='axes fraction')
 
 plt.tight_layout()
-plt.savefig('/media/sean/Storage/zlab/SX674_Spectrometer/data/5-28-19/NewSpectrometer/fig5.png',bbox_inches='tight')
+plt.savefig('/home/sean/git/zlab/SX674_Spectrometer/data/5-28-19/NewSpectrometer/fig5.png',bbox_inches='tight')
 plt.show()

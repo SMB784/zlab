@@ -1,0 +1,9 @@
+@@ -233,7 +233,7 @@
+     if file_id:
+       try:
+         metadata = self.auth.service.files().get(fileId=file_id,
+-                                                 fields=fields)\
++                                                 fields=fields,supportsTeamDrives=True)\
+           .execute(http=self.http)
+       except errors.HttpError as error:
+         raise ApiRequestError(error)
