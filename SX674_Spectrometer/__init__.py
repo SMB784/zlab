@@ -2,14 +2,19 @@ from astropy.io import fits
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib as mpl
+from matplotlib.ticker import FormatStrFormatter
 from pathlib import Path
 from scipy import stats
+from scipy import fftpack
 from scipy.integrate import simps
 from lmfit import Model
 import os,re,io,sys
 from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive
 import zipfile
+import traceback
+
 
 
 gauth=GoogleAuth()
@@ -35,11 +40,6 @@ processed_data_filename='spectral_data.csv'
 
 GeV=601
 tolerance=0.2
-
-# baseline=800.0 # No Binning
-baseline=1100.0 # 4x4 Binning
-trigger=1.2
-gate=10
 
 calibration=[543.26,0.13497] #4x4 binning
 # calibration=[543.741,0.068256] #No binning
@@ -114,19 +114,24 @@ def numerical_sort(value):
     return parts
 
 def find_max_window(df):
-    rollingArray=df[0:len(df[0])].rolling(window=gate).mean()[gate-1:len(df[0])]
     loc=[]
     y_window=[]
-    for i in range(0,len(df.columns)):
-        vals=rollingArray[i].values
+    for i in range(0,len(df.columns)-2):
+
+        vals=df[i].values
+        baseline=np.mean(df[i].values[0:150])
+        maximum=np.max(vals)
+        trigger=(maximum-baseline)/2
+        vals=vals-baseline
+        
         try:
-            y=np.min(np.argwhere(vals>=baseline*trigger))
-            y_window.append(np.min(np.argwhere(vals[y:len(vals)]<=baseline*trigger)))
-        except:
-            y=0
+            y_min=np.min(np.argwhere(vals>=trigger))
+            y_window.append(np.min(np.argwhere(vals[y_min:len(vals)]<=trigger)))
+        except ValueError:  #raised if `y` is empty.
+            y_min=0
             y_window.append(0)
-        loc.append(y)
-    return [np.max(y_window),loc]
+        loc.append(y_min)
+    return [y_window,loc]
 
 def doubleLorentzianFit(x,c1,c2,\
                 w1,w2,\
@@ -206,7 +211,7 @@ else:
         else:
             print("Existing data from TeamDrive found in these directories:\n")
             data_directory=find_directory(directory_select(data_root_directory))
-    except Exception:
+    except:
         print("File not found on TeamDrive.  Check URL and run program again")
-        print(Exception)
+        traceback.print_exc()
         sys.exit()
