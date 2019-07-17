@@ -31,7 +31,7 @@
   ```
   - ###### Run program
 
-## Calibration data for spectrometer (wavelength per pixel)
+# Calibration data for spectrometer (wavelength per pixel)
 
 #### 4x4 Binning: [543.26,0.13497]
 #### No Binning: [543.741,0.068256]
