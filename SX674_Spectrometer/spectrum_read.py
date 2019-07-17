@@ -4,14 +4,14 @@ from scipy import fftpack
 
 ax=plt.gca()
 
-start=545
-stop=673
-
 # baseline=800.0 # No Binning
 # calibration=[543.741,0.068256] #No binning
 
 baseline=1100.0 # 4x4 Binning
-calibration=[543.26,0.13497] #4x4 binning
+calibration=[557.26,0.13497] #4x4 binning
+
+start=558
+stop=673
 
 trigger=1.2
 gate=10
@@ -25,7 +25,7 @@ def plot_spectrum(im_fft):
 if directory_exists(find_directory(Path(Path(data_directory)/save_directory)))==True:
     print("Processed data already exists!")
 else:
-    os.mkdir(Path(Path(data_directory)/save_directory))
+    
 
     exclude = set([save_directory])
     for root,dirs,files in os.walk(data_directory,topdown=True):
@@ -83,13 +83,17 @@ else:
             
             spectral_data=np.c_[spectral_data,normalized_amplitude]
 
+#             # Comment out the block below to suppress plotting
 #             if(file_count==0):
 #                 plt.plot(wavelength,normalized_amplitude,color='red')
+#                 file_count+=1
+#                 plt.show()
 #             else:
 #                 break
 
+    # Comment out the block below to suppress data saving
             file_count+=1
-
+    os.mkdir(Path(Path(data_directory)/save_directory))
     spectral_data=pd.DataFrame(spectral_data)
     spectral_data.to_csv(Path(Path(data_directory)/(save_directory+processed_data_filename)),index=False,header=None)
 
