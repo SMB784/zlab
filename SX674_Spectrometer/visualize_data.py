@@ -5,6 +5,7 @@ import matplotlib as mpl
 from SX674_Spectrometer import *
 import SX674_Spectrometer
 
+
 fontsize=16
 plt.rcParams.update({'font.size':fontsize})
 grid=plt.GridSpec(2,2)

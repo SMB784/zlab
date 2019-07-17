@@ -1,5 +1,6 @@
 from SX674_Spectrometer import *
 
+
 try:
     input_data=pd.read_csv(find_directory(Path(Path(data_directory)\
                                                /(save_directory+processed_data_filename))),\
