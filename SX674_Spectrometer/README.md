@@ -30,3 +30,11 @@
   patch -u $HOME/miniconda3/lib/python3.7/site-packages/pydrive/files.py -i $HOME/git/zlab/SX674_Spectrometer/files_fix.patch
   ```
   - ###### Run program
+
+# Calibration data for spectrometer (wavelength per pixel)
+
+#### 4x4 Binning: [543.26,0.13497]
+#### No Binning: [543.741,0.068256]
+#### Applies to:
+   - ###### 5-28-19.zip
+   - ###### 5-29-19.zip
