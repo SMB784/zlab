@@ -8,7 +8,7 @@ ax=plt.gca()
 # calibration=[543.741,0.068256] #No binning
 
 baseline=1100.0 # 4x4 Binning
-calibration=[557.26,0.13497] #4x4 binning
+calibration=[543.26,0.13497] #4x4 binning
 
 start=558
 stop=673
