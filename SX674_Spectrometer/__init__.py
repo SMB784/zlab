@@ -35,7 +35,6 @@ data_root_directory=Path(Path(os.getcwd())/"data/")
 save_directory='processed_data/'
 processed_data_filename='spectral_data.csv'
 
-
 GeV=601
 tolerance=0.2
 
