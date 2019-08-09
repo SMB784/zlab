@@ -15,8 +15,6 @@ from pydrive.drive import GoogleDrive
 import zipfile
 import traceback
 
-
-
 gauth=GoogleAuth()
 gauth.LoadCredentialsFile("credentials.txt")
 if gauth.credentials is None:
