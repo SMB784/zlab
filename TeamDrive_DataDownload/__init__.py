@@ -3,7 +3,7 @@ Created on Aug 9, 2019
 
 @author: sean
 '''
-import os,re,io,sys,zipfile
+import os,re,io,sys,zipfile,traceback
 from pathlib import Path
 from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive
@@ -24,18 +24,28 @@ else:
 gauth.SaveCredentialsFile("credentials.txt")
 drive=GoogleDrive(gauth)
 
-data_root_directory=Path(Path(os.getcwd())/"data/")
-save_directory='processed_data/'
-processed_data_filename='spectral_data.csv'
+# data_root_directory=Path(Path(os.getcwd())/"data/")
+# save_directory='processed_data/'
+# processed_data_filename='spectral_data.csv'
 
-numbers=re.compile(r'(\d+)')
+data_root_directory=''
+
+# numbers=re.compile(r'(\d+)')
+
+def set_root_directory(directory):
+    return directory
+
+def set_save_directory(directory):
+    return directory
+
+def set_processed_data_filename(filename):
+    return filename
 
 def find_directory(directory):
     for root,dirs,files in os.walk(Path(data_root_directory)):
         dirs.sort(key=numerical_sort)
         dir_path=os.path.join(root,directory)
         if(os.path.exists(dir_path)):
-            print("\n"+str(dir_path)+" directory found\n")
             return dir_path
     return None
 
@@ -79,7 +89,7 @@ def directory_select(directory):
 def download_from_teamdrive(file):
 
     drive_file=drive.CreateFile(file)
-    downloaded_file=Path(data_root_directory/file['title'])
+    downloaded_file=Path(data_root_directory+file['title'])
     drive_file.GetContentFile(downloaded_file)
 
     if(drive_file['title'].split(".")[1]=='zip'):
@@ -89,6 +99,7 @@ def download_from_teamdrive(file):
         os.remove(downloaded_file)
 
 def numerical_sort(value):
+    numbers=re.compile(r'(\d+)')
     parts=numbers.split(value)
     parts[1::2]=map(int,parts[1::2])
     return parts

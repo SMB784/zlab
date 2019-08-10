@@ -5,12 +5,10 @@ import matplotlib.pyplot as plt
 import matplotlib as mpl
 from matplotlib.ticker import FormatStrFormatter
 from pathlib import Path
-from scipy import stats
-from scipy import fftpack
+from scipy import stats,fftpack
 from scipy.integrate import simps
 from lmfit import Model
 import os,re,io,sys
-import traceback
 
 save_directory='processed_data/'
 processed_data_filename='spectral_data.csv'
