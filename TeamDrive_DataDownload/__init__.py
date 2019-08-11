@@ -8,56 +8,40 @@ from pathlib import Path
 from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive
 
-
-gauth=GoogleAuth()
-gauth.LoadCredentialsFile("credentials.txt")
-if gauth.credentials is None:
-    # Authenticate if they're not there
-    gauth.LocalWebserverAuth()
-elif gauth.access_token_expired:
-    # Refresh them if expired
-    gauth.Refresh()
-else:
-    # Initialize the saved creds
-    gauth.Authorize()
-# Save the current credentials to a file
-gauth.SaveCredentialsFile("credentials.txt")
-drive=GoogleDrive(gauth)
-
-# data_root_directory=Path(Path(os.getcwd())/"data/")
-# save_directory='processed_data/'
-# processed_data_filename='spectral_data.csv'
-
-data_root_directory=''
-
-# numbers=re.compile(r'(\d+)')
-
-def set_root_directory(directory):
-    return directory
-
-def set_save_directory(directory):
-    return directory
-
-def set_processed_data_filename(filename):
-    return filename
-
-def find_directory(directory):
-    for root,dirs,files in os.walk(Path(data_root_directory)):
-        dirs.sort(key=numerical_sort)
-        dir_path=os.path.join(root,directory)
-        if(os.path.exists(dir_path)):
-            return dir_path
-    return None
-
-def directory_exists(path):
+def directory_exists(path,root_directory):
     try:
-        for root,dirs,files in os.walk(Path(data_root_directory)):
+        for root,dirs,files in os.walk(Path(root_directory)):
             dirs.sort(key=numerical_sort)
             if(os.path.isdir(path)):
                 return True
         return False
     except:
         return False
+
+def directory_select(directory):
+    list_files(directory)
+    directory_selection=input("Please enter a bottom-level directory for analysis: ")
+    return directory_selection
+
+def download_from_teamdrive(file,root_directory):
+
+    drive_file=drive.CreateFile(file)
+    downloaded_file=Path(Path(root_directory)/file['title'])
+    drive_file.GetContentFile(downloaded_file)
+
+    if(drive_file['title'].split(".")[1]=='zip'):
+        zip_ref=zipfile.ZipFile(downloaded_file,'r')
+        zip_ref.extractall(root_directory)
+        zip_ref.close()
+        os.remove(downloaded_file)
+
+def find_directory(root_dir,select_dir):
+    for root,dirs,files in os.walk(root_dir):
+        dirs.sort(key=numerical_sort)
+        dir_path=os.path.join(root,select_dir)
+        if(os.path.exists(dir_path)):
+            return dir_path
+    return None
 
 def find_file(drive_URL):
 
@@ -80,26 +64,26 @@ def list_files(startpath):
         level = root.replace(str(startpath), '').count(os.sep)
         indent = ' ' * 4 * (level)
         print('|->{}{}'.format(indent, os.path.basename(root)))
-        
-def directory_select(directory):
-    list_files(directory)
-    directory_selection=input("Please enter a bottom-level directory for analysis: ")
-    return directory_selection
-
-def download_from_teamdrive(file):
-
-    drive_file=drive.CreateFile(file)
-    downloaded_file=Path(data_root_directory+file['title'])
-    drive_file.GetContentFile(downloaded_file)
-
-    if(drive_file['title'].split(".")[1]=='zip'):
-        zip_ref=zipfile.ZipFile(downloaded_file,'r')
-        zip_ref.extractall(data_root_directory)
-        zip_ref.close()
-        os.remove(downloaded_file)
 
 def numerical_sort(value):
     numbers=re.compile(r'(\d+)')
     parts=numbers.split(value)
     parts[1::2]=map(int,parts[1::2])
     return parts
+
+################### Credentials and Authentication block ####################
+
+gauth=GoogleAuth()
+gauth.LoadCredentialsFile("credentials.txt")
+if gauth.credentials is None:
+    # Authenticate if they're not there
+    gauth.LocalWebserverAuth()
+elif gauth.access_token_expired:
+    # Refresh them if expired
+    gauth.Refresh()
+else:
+    # Initialize the saved creds
+    gauth.Authorize()
+# Save the current credentials to a file
+gauth.SaveCredentialsFile("credentials.txt")
+drive=GoogleDrive(gauth)

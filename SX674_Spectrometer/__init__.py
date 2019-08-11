@@ -8,10 +8,10 @@ from pathlib import Path
 from scipy import stats,fftpack
 from scipy.integrate import simps
 from lmfit import Model
+from TeamDrive_DataDownload import *
 import os,re,io,sys
 
-save_directory='processed_data/'
-processed_data_filename='spectral_data.csv'
+data_root_directory=Path(Path(os.getcwd())/'data/')
 
 GeV=601
 tolerance=0.2
