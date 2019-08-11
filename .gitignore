@@ -3,3 +3,4 @@ data/
 quickstart.py
 token*
 credentials.txt
+*.ipynb
