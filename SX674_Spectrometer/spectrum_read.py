@@ -20,8 +20,7 @@ gate=10
 
 spectral_data=[]
 
-def plot_spectrum(im_fft):
-    plt.imshow(np.abs(im_fft),plt.cm.gray)
+
 
 if directory_exists(save_dir,find_directory(Path(download_dir),save_dir))==True:
     print("Processed data already exists!")
@@ -39,17 +38,7 @@ else:
             
             image=image_read.Image(Path(download_dir)/file).read_image()
 
-            im_fft=fftpack.fft2(image.to_numpy())
-            
-            keep_fraction = 0.05
-
-            im_fft2 = im_fft.copy()
-            r, c = im_fft2.shape
-
-            im_fft2[int(r*keep_fraction):int(r*(1-keep_fraction))] = 0
-            im_fft2[:, int(c*keep_fraction):int(c*(1-keep_fraction))] = 0
-            
-            spectrum=pd.DataFrame(fftpack.ifft2(im_fft2).real)
+            spectrum=pd.DataFrame(image)
 
             window=find_max_window(spectrum)
     
@@ -59,7 +48,6 @@ else:
             
             for i in range(0,len(spectrum.columns)-2): # -1 cuts last datapoint because it is erroneous
                 amplitude=np.max(spectrum.loc[window[1][i]:window[0][i]+window[1][i],i])
-#                 amplitude=np.sum(spectrum[i].to_numpy())
 
                 spectrumArray[0].append(np.float(calibration[0]+i*calibration[1]))
                 spectrumArray[1].append(amplitude)

@@ -1,14 +1,13 @@
-import numpy as np
-import matplotlib.pyplot as plt
-import matplotlib as mpl
-from matplotlib.ticker import FormatStrFormatter
-from scipy import stats,fftpack
-from scipy.integrate import simps
-from lmfit import Model
+########################## Import bolt-on modules ############################
 from TeamDrive_DataDownload import *
 from TeamDrive_DataDownload import data_download
 from Trius_SX674_Camera import *
 from Trius_SX674_Camera import image_read
+########################## Import built-in modules ###########################
+import matplotlib as mpl
+from matplotlib.ticker import FormatStrFormatter
+from scipy.integrate import simps
+from lmfit import Model
 
 data_root_directory=Path(Path(os.getcwd())/'data/')
 
