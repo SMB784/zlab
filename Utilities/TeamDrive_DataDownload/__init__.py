@@ -73,9 +73,10 @@ def numerical_sort(value):
     return parts
 
 ################### Credentials and Authentication block ####################
-
-gauth=GoogleAuth()
-gauth.LoadCredentialsFile("credentials.txt")
+auth_path='/home/sean/git/zlab/Utilities/TeamDrive_DataDownload/'
+GoogleAuth.DEFAULT_SETTINGS['client_config_file'] = Path(auth_path)/'client_secrets.json'
+gauth=GoogleAuth()#settings_file=Path(auth_path)/'settings.yaml')
+gauth.LoadCredentialsFile(Path(auth_path)/'credentials.json')
 if gauth.credentials is None:
     # Authenticate if they're not there
     gauth.LocalWebserverAuth()
@@ -86,5 +87,5 @@ else:
     # Initialize the saved creds
     gauth.Authorize()
 # Save the current credentials to a file
-gauth.SaveCredentialsFile("credentials.txt")
+gauth.SaveCredentialsFile(Path(auth_path)/'credentials.json')
 drive=GoogleDrive(gauth)

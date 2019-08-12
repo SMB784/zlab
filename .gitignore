@@ -1,7 +1,10 @@
 data/
 *.json
-quickstart.py
+*.yaml
 token*
+<<<<<<< HEAD
 credentials.txt
 *.ipynb
 /Devices/
+=======
+>>>>>>> branch 'master' of https://github.com/SMB784/zlab.git

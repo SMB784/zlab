@@ -3,7 +3,7 @@ Created on Aug 11, 2019
 
 @author: sean
 '''
-from Trius_SX674_Camera import *
+from Devices.Trius_SX674_Camera import *
 
 class Image():
 
