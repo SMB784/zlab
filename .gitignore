@@ -4,3 +4,4 @@ quickstart.py
 token*
 credentials.txt
 *.ipynb
+/Devices/

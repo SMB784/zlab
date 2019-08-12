@@ -1,8 +1,8 @@
 ########################## Import bolt-on modules ############################
-from TeamDrive_DataDownload import *
-from TeamDrive_DataDownload import data_download
-from Trius_SX674_Camera import *
-from Trius_SX674_Camera import image_read
+from Utilities.TeamDrive_DataDownload import *
+from Utilities.TeamDrive_DataDownload import data_download
+from Devices.Trius_SX674_Camera import *
+from Devices.Trius_SX674_Camera import image_read
 ########################## Import built-in modules ###########################
 import matplotlib as mpl
 from matplotlib.ticker import FormatStrFormatter

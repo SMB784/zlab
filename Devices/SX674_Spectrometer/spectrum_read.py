@@ -1,4 +1,4 @@
-from SX674_Spectrometer import *
+from Devices.SX674_Spectrometer import *
 
 download_dir=data_download.Download(data_root_directory).download_data()
 save_dir='processed_data'
@@ -18,8 +18,6 @@ gate=10
 
 spectral_data=[]
 
-print(Path(download_dir))
-
 if directory_exists(Path(download_dir),save_dir)==True:
     print("Processed data already exists!")
 else:
@@ -27,7 +25,7 @@ else:
     exclude = set([save_dir])
     for root,dirs,files in os.walk(download_dir,topdown=True):
         dirs[:] = [d for d in dirs if d not in exclude]
-        #dirs.sort(key=numerical_sort) # sorts directories by ascending number
+
         file_count=0
     
         for file in sorted(files,key=numerical_sort): 
