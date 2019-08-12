@@ -2,6 +2,16 @@
 Created on Aug 9, 2019
 
 @author: sean
+
+The data_download module in this utility used to download data from the
+team drive when given an appropriate team drive URL.
+
+Required inputs:  root directory where data is to be downloaded
+Returned outputs: directory of downloaded data
+Example usage:
+
+data_root_directory=/home/
+download_dir=data_download.Download(data_root_directory).download_data()
 '''
 import os,re,io,sys,zipfile,traceback
 from pathlib import Path
