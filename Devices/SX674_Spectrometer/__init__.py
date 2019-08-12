@@ -20,7 +20,6 @@ spectrum=spectrum_read.Spectrum(image_directory,cal_constants).read_spectrum()
 print(spectrum)
 
 '''
-
 ########################## Import bolt-on modules ############################
 from Devices.Trius_SX674_Camera import *
 from Devices.Trius_SX674_Camera import image_read
