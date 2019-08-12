@@ -1,8 +1,7 @@
 from SX674_Spectrometer import *
-from scipy import fftpack
 
-download=data_download.Download(data_root_directory)
-save_directory='processed_data/'
+download_dir=data_download.Download(data_root_directory).download_data()
+save_dir='processed_data/'
 processed_data_filename='spectral_data.csv'
 
 ax=plt.gca()
@@ -24,24 +23,23 @@ spectral_data=[]
 def plot_spectrum(im_fft):
     plt.imshow(np.abs(im_fft),plt.cm.gray)
 
-if directory_exists(find_directory(Path(Path(download)/save_directory)))==True:
+if directory_exists(save_dir,find_directory(Path(download_dir),save_dir))==True:
     print("Processed data already exists!")
 else:
 
-    exclude = set([save_directory])
-    for root,dirs,files in os.walk(download,topdown=True):
+    exclude = set([save_dir])
+    for root,dirs,files in os.walk(download_dir,topdown=True):
         dirs[:] = [d for d in dirs if d not in exclude]
         #dirs.sort(key=numerical_sort) # sorts directories by ascending number
         file_count=0
     
         for file in sorted(files,key=numerical_sort): 
+
             files.sort(key=numerical_sort)
-    
-            hdul = fits.open(Path(download)/file)
-            #reads in data from file, converts to float type, drops first two and last columns (keep 2->len-1)
-            spectrum=pd.DataFrame(hdul[0].data[:,2:len(hdul[0].data[0,:]-1)])
             
-            im_fft=fftpack.fft2(spectrum.to_numpy())
+            image=image_read.Image(Path(download_dir)/file).read_image()
+
+            im_fft=fftpack.fft2(image.to_numpy())
             
             keep_fraction = 0.05
 
@@ -55,7 +53,7 @@ else:
 
             window=find_max_window(spectrum)
     
-            print(Path(download)/file)
+            print(Path(download_dir)/file)
 
             spectrumArray=[[],[]]
             
@@ -94,9 +92,9 @@ else:
 
     # Comment out the block below to suppress data saving
             file_count+=1
-    os.mkdir(Path(Path(download)/save_directory))
+    os.mkdir(Path(Path(download_dir)/save_dir))
     spectral_data=pd.DataFrame(spectral_data)
-    spectral_data.to_csv(Path(Path(download)/(save_directory+processed_data_filename)),index=False,header=None)
+    spectral_data.to_csv(Path(Path(download_dir)/(save_dir+processed_data_filename)),index=False,header=None)
 
 print("Done reading data!")
 
