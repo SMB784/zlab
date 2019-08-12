@@ -30,6 +30,3 @@ class Image():
         image=pd.DataFrame(fftpack.ifft2(im_fft2).real)
         
         return image
-
-    def plot_spectrum(self,im_fft):
-        plt.imshow(np.abs(im_fft),plt.cm.gray)

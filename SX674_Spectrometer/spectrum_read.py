@@ -1,10 +1,8 @@
 from SX674_Spectrometer import *
 
 download_dir=data_download.Download(data_root_directory).download_data()
-save_dir='processed_data/'
-processed_data_filename='spectral_data.csv'
-
-ax=plt.gca()
+save_dir='processed_data'
+processed_data_filename='/spectral_data.csv'
 
 # baseline=800.0 # No Binning
 # calibration=[543.741,0.068256] #No binning
@@ -20,9 +18,9 @@ gate=10
 
 spectral_data=[]
 
+print(Path(download_dir))
 
-
-if directory_exists(save_dir,find_directory(Path(download_dir),save_dir))==True:
+if directory_exists(Path(download_dir),save_dir)==True:
     print("Processed data already exists!")
 else:
 
@@ -33,19 +31,16 @@ else:
         file_count=0
     
         for file in sorted(files,key=numerical_sort): 
-
             files.sort(key=numerical_sort)
             
-            image=image_read.Image(Path(download_dir)/file).read_image()
-
-            spectrum=pd.DataFrame(image)
+            spectrum=image_read.Image(Path(download_dir)/file).read_image()
 
             window=find_max_window(spectrum)
-    
+
             print(Path(download_dir)/file)
 
             spectrumArray=[[],[]]
-            
+
             for i in range(0,len(spectrum.columns)-2): # -1 cuts last datapoint because it is erroneous
                 amplitude=np.max(spectrum.loc[window[1][i]:window[0][i]+window[1][i],i])
 
@@ -70,13 +65,12 @@ else:
             
             spectral_data=np.c_[spectral_data,normalized_amplitude]
 
-#             # Comment out the block below to suppress plotting
-#             if(file_count==0):
-#                 plt.plot(wavelength,normalized_amplitude,color='red')
-#                 file_count+=1
-#                 plt.show()
-#             else:
-#                 break
+            # Comment out the block below to suppress plotting
+            if(file_count==0):
+                plt.figure(1)
+                plt.plot(wavelength,normalized_amplitude,color='red')
+                plt.figure(2)
+                plot_image(spectrum)
 
     # Comment out the block below to suppress data saving
             file_count+=1
@@ -85,4 +79,3 @@ else:
     spectral_data.to_csv(Path(Path(download_dir)/(save_dir+processed_data_filename)),index=False,header=None)
 
 print("Done reading data!")
-

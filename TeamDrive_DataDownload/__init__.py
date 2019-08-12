@@ -8,14 +8,15 @@ from pathlib import Path
 from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive
 
-def directory_exists(path,root_directory):
+def directory_exists(root_directory,dir_name):
     try:
         for root,dirs,files in os.walk(Path(root_directory)):
             dirs.sort(key=numerical_sort)
-            if(os.path.isdir(path)):
+            if(os.path.isdir(Path(root_directory)/dir_name)):
                 return True
         return False
     except:
+        traceback.print_exc()
         return False
 
 def directory_select(directory):

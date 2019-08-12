@@ -8,3 +8,7 @@ import pandas as pd
 import numpy as np
 from scipy import stats,fftpack
 import matplotlib.pyplot as plt
+
+def plot_image(image):
+    plt.imshow(np.abs(np.fliplr(image)),plt.cm.gray)
+    plt.show()
