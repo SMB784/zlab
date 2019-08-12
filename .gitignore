@@ -2,9 +2,3 @@ data/
 *.json
 *.yaml
 token*
-<<<<<<< HEAD
-credentials.txt
-*.ipynb
-/Devices/
-=======
->>>>>>> branch 'master' of https://github.com/SMB784/zlab.git
