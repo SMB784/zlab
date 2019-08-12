@@ -55,19 +55,23 @@ def find_directory(root_dir,select_dir):
     return None
 
 def find_file(drive_URL):
-
-    file_id = drive_URL.split("id=")[1]
-
-    file_list = drive.ListFile({'q': '',\
-                                'corpora': 'teamDrive',\
-                                'teamDriveId': '0AC8KtsHsd3AhUk9PVA',\
-                                'includeItemsFromAllDrives': True,\
-                                'supportsAllDrives': True}).GetList()
+    try:
+        file_id = drive_URL.split("id=")[1]
+        print(file_id)
     
-    for file in file_list:
-        if(file['id']==file_id):
-            return file
-    return None
+        file_list = drive.ListFile({'q': '',\
+                                    'corpora': 'teamDrive',\
+                                    'teamDriveId': '0AC8KtsHsd3AhUk9PVA',\
+                                    'includeItemsFromAllDrives': True,\
+                                    'supportsAllDrives': True}).GetList()
+        print(file_list)
+        for file in file_list:
+            if(file['id']==file_id):
+                return file
+        return None
+    except:
+        traceback.print_exc()
+        return None
 
 def list_files(startpath):
     for root, dirs, files in os.walk(startpath):
@@ -85,7 +89,7 @@ def numerical_sort(value):
 ################### Credentials and Authentication block ####################
 auth_path='/home/sean/git/zlab/Utilities/TeamDrive_DataDownload/'
 GoogleAuth.DEFAULT_SETTINGS['client_config_file'] = Path(auth_path)/'client_secrets.json'
-gauth=GoogleAuth()#settings_file=Path(auth_path)/'settings.yaml')
+gauth=GoogleAuth(settings_file=Path(auth_path)/'settings.yaml')
 gauth.LoadCredentialsFile(Path(auth_path)/'credentials.json')
 if gauth.credentials is None:
     # Authenticate if they're not there

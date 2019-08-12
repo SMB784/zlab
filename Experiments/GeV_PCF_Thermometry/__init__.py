@@ -18,6 +18,7 @@ from Utilities.SplitVacancy_SpectralFit import spectral_fit
 ############################## Initializations ##############################
 
 data_root_directory=Path(Path(os.getcwd())/'data/')
+print(data_root_directory)
 download_dir=data_download.Download(data_root_directory).download_data()
 
 print(download_dir)
