@@ -1,1 +1,0 @@
-All experimental data downloaded from Teamdrive will be saved in this folder. This folder will be excluded from pushes by .gitignore in order to preserve exclusivity of experimental results. DO NOT EDIT THE .gitignore

@@ -16,9 +16,10 @@ from Utilities.SplitVacancy_SpectralFit import spectral_fit
 ########################## Import built-in modules ##########################
 
 ############################## Initializations ##############################
-
 data_root_directory=Path(Path(os.getcwd())/'data/')
-print(data_root_directory)
 download_dir=data_download.Download(data_root_directory).download_data()
 
-print(download_dir)
+# calibration=[543.741,0.068256] #No binning
+calibration=[543.26,0.13497] #4x4 binning
+start=585
+stop=673

@@ -7,7 +7,7 @@ from Devices.SX674_Spectrometer import *
 
 class Spectrum():
     
-    def init(self,image_dir,cal_constants):
+    def __init__(self,image_dir,cal_constants):
         self.image=image_dir
         self.calibration=cal_constants
 
@@ -18,11 +18,13 @@ class Spectrum():
         spectrum_data=[[],[]]
         
         for i in range(0,len(spectrum.columns)-2): # -1 cuts last datapoint because it is erroneous
-            amplitude=np.max(spectrum.loc[window[1][i]:window[0][i]+window[1][i],i])
-        
-            spectrum_data[0].append(np.float(self.calibration[0]+i*self.calibration[1]))
+            amplitude=np.mean(spectrum.loc[window[1][i]:window[0][i]+window[1][i],i])
+#             amplitude=np.mean(spectrum.loc[window[1][i]:window[0][i]+window[1][i],i])
+            wavelength=np.float(self.calibration[0]+i*self.calibration[1])
+
+            spectrum_data[0].append(wavelength)
             spectrum_data[1].append(amplitude)
         
-            spectrum_data[1]=np.flip(spectrum_data[1],axis=0)
+        spectrum_data[1]=np.flip(spectrum_data[1],axis=0)
         
         return pd.DataFrame(np.transpose(spectrum_data),dtype=float)

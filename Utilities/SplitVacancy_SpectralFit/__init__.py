@@ -20,7 +20,7 @@ from SplitVacancy_SpectralFit import spectral_fit
 spec_start=600
 spec_stop=625
 input_spectrum=pd.DataFrame([np.arange(1,625),np.random.rand(1,625)])
-spectral_data=spectrum_fit.Fit(spec_start,spec_stop,input_spectrum).fit_spectrum()
+spectral_data=spectrum_fit.Fit(spec_start,spec_stop,input_spectrum,fit_model).fit_spectrum()
 print(spectrum)
 
 '''

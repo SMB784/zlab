@@ -25,7 +25,6 @@ class Download:
         else: # searches for data on teamdrive according to input URL
             try:
                 data=find_file(drive_URL) # returns the file metadata
-                
                 download_dir=Path(self.root_directory)/data['title'].split('.')[0]# names directory after the name of the file to be downloaded
                 
                 if directory_exists(download_dir,self.root_directory)==False: # if directory with filename doesn't already exist, download file
@@ -35,7 +34,7 @@ class Download:
                     return find_directory(self.root_directory,directory_select(self.root_directory)) # returns path of user selected directory
                 else:
                     print("Existing data from TeamDrive found in these directories:\n")
-                    return find_directory(directory_select(self.root_directory)) # returns path of user selected directory
+                    return find_directory(self.root_directory,directory_select(self.root_directory)) # returns path of user selected directory
             except:
                 print("File not found on TeamDrive.  Check URL and run program again")
                 traceback.print_exc()

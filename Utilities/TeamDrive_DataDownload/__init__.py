@@ -8,7 +8,11 @@ team drive when given an appropriate team drive URL.
 
 Required inputs:  root directory where data is to be downloaded
 Returned outputs: directory of downloaded data
+
 Example usage:
+
+from Utilities.TeamDrive_DataDownload import *
+from Utilities.TeamDrive_DataDownload import data_download
 
 data_root_directory=/home/
 download_dir=data_download.Download(data_root_directory).download_data()
@@ -57,14 +61,12 @@ def find_directory(root_dir,select_dir):
 def find_file(drive_URL):
     try:
         file_id = drive_URL.split("id=")[1]
-        print(file_id)
-    
+
         file_list = drive.ListFile({'q': '',\
                                     'corpora': 'teamDrive',\
                                     'teamDriveId': '0AC8KtsHsd3AhUk9PVA',\
                                     'includeItemsFromAllDrives': True,\
                                     'supportsAllDrives': True}).GetList()
-        print(file_list)
         for file in file_list:
             if(file['id']==file_id):
                 return file
@@ -87,19 +89,22 @@ def numerical_sort(value):
     return parts
 
 ################### Credentials and Authentication block ####################
-auth_path='/home/sean/git/zlab/Utilities/TeamDrive_DataDownload/'
-GoogleAuth.DEFAULT_SETTINGS['client_config_file'] = Path(auth_path)/'client_secrets.json'
-gauth=GoogleAuth(settings_file=Path(auth_path)/'settings.yaml')
-gauth.LoadCredentialsFile(Path(auth_path)/'credentials.json')
-if gauth.credentials is None:
-    # Authenticate if they're not there
-    gauth.LocalWebserverAuth()
-elif gauth.access_token_expired:
-    # Refresh them if expired
-    gauth.Refresh()
-else:
-    # Initialize the saved creds
-    gauth.Authorize()
-# Save the current credentials to a file
-gauth.SaveCredentialsFile(Path(auth_path)/'credentials.json')
-drive=GoogleDrive(gauth)
+try:
+    auth_path='/home/sean/git/zlab/Utilities/TeamDrive_DataDownload/'
+    GoogleAuth.DEFAULT_SETTINGS['client_config_file'] = Path(auth_path)/'client_secrets.json'
+    gauth=GoogleAuth()
+    gauth.LoadCredentialsFile(Path(auth_path)/'credentials.txt')
+    if gauth.credentials is None:
+        # Authenticate if they're not there
+        gauth.LocalWebserverAuth()
+    elif gauth.access_token_expired:
+        # Refresh them if expired
+        gauth.Refresh()
+    else:
+        # Initialize the saved creds
+        gauth.Authorize()
+    # Save the current credentials to a file
+    gauth.SaveCredentialsFile(Path(auth_path)/'credentials.txt')
+    drive=GoogleDrive(gauth)
+except:
+    traceback.print_exc()
