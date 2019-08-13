@@ -8,9 +8,10 @@ containing a split-vacancy fluorescence spectrum, fit the peaks with various
 user selectable fit functions found in the init file, and output a fit
 spectrum and associated fit values 
 
-Required inputs:  upper and lower spectral wavelength bounds, pandas dataframe
-containing spectrum, desired fitting function from functions listed below
-Returned outputs: fit spectrum and fit values
+Required inputs:  start and stop spectral wavelengths, pandas dataframe
+containing spectrum
+Returned outputs: windowed spectrum, fit spectrum for specified window,
+and fit values
 
 Example usage:
 
@@ -31,7 +32,7 @@ import pandas as pd
 import re
 
 GeV=601
-tolerance=0.3
+tolerance=0.2
 
 initial_fit=[]
 

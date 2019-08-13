@@ -90,10 +90,17 @@ def numerical_sort(value):
 
 ################### Credentials and Authentication block ####################
 try:
-    auth_path='/home/sean/git/zlab/Utilities/TeamDrive_DataDownload/'
-    GoogleAuth.DEFAULT_SETTINGS['client_config_file'] = Path(auth_path)/'client_secrets.json'
+    # Find location of TeamDrive_DataDownload directory containing auth files
+    auth_path=Path('/')
+    for root, dirs, files in os.walk('../..'):
+        for name in dirs:
+            if name.endswith('TeamDrive_DataDownload'):
+                auth_path=Path(os.path.abspath(os.path.join(root,name)))
+    
+    # Authenticate using auth_path defined above
+    GoogleAuth.DEFAULT_SETTINGS['client_config_file'] = auth_path/'client_secrets.json'
     gauth=GoogleAuth()
-    gauth.LoadCredentialsFile(Path(auth_path)/'credentials.txt')
+    gauth.LoadCredentialsFile(auth_path/'credentials.txt')
     if gauth.credentials is None:
         # Authenticate if they're not there
         gauth.LocalWebserverAuth()
@@ -104,7 +111,7 @@ try:
         # Initialize the saved creds
         gauth.Authorize()
     # Save the current credentials to a file
-    gauth.SaveCredentialsFile(Path(auth_path)/'credentials.txt')
+    gauth.SaveCredentialsFile(auth_path/'credentials.txt')
     drive=GoogleDrive(gauth)
 except:
     traceback.print_exc()

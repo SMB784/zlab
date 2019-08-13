@@ -18,6 +18,8 @@ class Fit():
                      [4.5,11,40],\
                      [1,1,1],0]
 
+        lmodel=Model(lorentzianGaussianFit)
+
         lmodel.set_param_hint('c1',min=598,max=605)
         lmodel.set_param_hint('c2',min=610,max=630)
         lmodel.set_param_hint('c3',min=605,max=630)
@@ -30,8 +32,6 @@ class Fit():
                                   c2=initial_fit[0][1],w2=initial_fit[1][1],h2=initial_fit[2][1],\
                                   c3=initial_fit[0][2],w3=initial_fit[1][2],h3=initial_fit[2][2],\
                                   o1=initial_fit[3])
-
-
         
         lambdaStartIndex=self.spectrum[self.spectrum[[0]].apply(np.isclose,b=self.start,atol=tolerance).any(1)].index.tolist()[0]
         lambdaStopIndex=self.spectrum[self.spectrum[[0]].apply(np.isclose,b=self.stop,atol=tolerance).any(1)].index.tolist()[0]
@@ -41,7 +41,13 @@ class Fit():
         normalized_amplitude=(amplitude-amplitude.min())/(amplitude.max()-amplitude.min())
 
         result=lmodel.fit(normalized_amplitude,params,x=wavelength)
-        fit_spectrum=[wavelength,result.best_fit]
-        fit_values=result.best_values
 
-        return [fit_spectrum,fit_values]
+        raw_spectrum=wavelength
+        spectrum_fit=wavelength
+        
+        raw_spectrum=np.c_[raw_spectrum,normalized_amplitude]
+        spectrum_fit=np.c_[spectrum_fit,result.best_fit]
+        
+        fit_values=np.array(findValue(result.best_values))
+
+        return raw_spectrum,spectrum_fit,fit_values

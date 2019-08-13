@@ -6,9 +6,9 @@ Created on Aug 12, 2019
 from Experiments.GeV_PCF_Thermometry import *
 
 save_dir='processed_data'
-processed_data_filename='/spectral_data.csv'
-
 spectral_data=[]
+
+temp_cal=[599.6316,0.0078]
 
 if directory_exists(Path(download_dir),save_dir)==True:
     print("Processed data already exists!")
@@ -22,69 +22,33 @@ else:
         for file in sorted(files,key=numerical_sort): 
             files.sort(key=numerical_sort)
 
-            input_data=pd.DataFrame(spectrum_read.Spectrum(Path(download_dir)/file,calibration).read_spectrum(),dtype=float)
+            input_spectrum=pd.DataFrame(spectrum_read.Spectrum(Path(download_dir)/file,calibration).read_spectrum(),dtype=float)
 
-            lambdaStartIndex=input_data[input_data[[0]].apply(np.isclose,b=start,atol=tolerance).any(1)].index.tolist()[0]
-            lambdaStopIndex=input_data[input_data[[0]].apply(np.isclose,b=stop,atol=tolerance).any(1)].index.tolist()[0]
-     
-            wavelength=input_data.iloc[lambdaStartIndex:lambdaStopIndex,0].to_numpy()
-            amplitude=input_data.iloc[lambdaStartIndex:lambdaStopIndex,1].to_numpy()
-            normalized_amplitude=(amplitude-amplitude.min())/\
-                                         (amplitude.max()-amplitude.min())
-
-            spectral_data=spectrum_fit.Fit(start,stop,\
-                                           pd.DataFrame(wavelength,\
-                                           normalized_amplitude)).fit_spectrum()
+            fit_data=spectral_fit.Fit(start,stop,input_spectrum).fit_spectrum()
 
             if(file_count==0):
-                spectral_data=wavelength
+                spectrum_data=np.transpose(fit_data[0])[0]
+                spectrum_fit=np.transpose(fit_data[1])[0]
+                fit_values=np.transpose(fit_data[2])
             else:
-                spectral_data=np.c_[spectral_data,normalized_amplitude]
+                spectrum_data=np.c_[spectrum_data,np.transpose(fit_data[0])[1]]
+                spectrum_fit=np.c_[spectrum_fit,np.transpose(fit_data[1])[1]]
+                fit_values=np.c_[fit_values,np.transpose(fit_data[2])]
 
             file_count+=1
+    
+    # Comment out the block below to suppress data saving
 
-        # Comment out the block below to suppress data saving
+    os.mkdir(Path(Path(download_dir)/save_dir))
 
-        os.mkdir(Path(Path(download_dir)/save_dir))
-        spectral_data=pd.DataFrame(spectral_data)
-        spectral_data.to_csv(Path(Path(download_dir)/(save_dir+processed_data_filename)),index=False,header=None)
-         
-        print("Done reading data!")
+    temp_values=pd.DataFrame((fit_values[0]-temp_cal[0])/temp_cal[1])
+    spectrum_data=pd.DataFrame(spectrum_data)
+    spectrum_fit=pd.DataFrame(spectrum_fit)
+    fit_values=pd.DataFrame(np.transpose(fit_values))
 
-#                 temp_cal=[599.6316,0.0078] # from center wavelength vs temp: [intercept, slope]
-#         fit_values=[]
-#         temp_values=[]
-#         
-#                 for i in range(1,len(self.spectrum.columns)):
-# 
-#         
-#             fit_curves=np.c_[fit_curves,result.best_fit]
-#             
-#             fit_values.append(findValue(result.best_values))
-#             
-#             temp_value=(findValue(result.best_values)[0]-temp_cal[0])/temp_cal[1]
-#             temp_values.append(temp_value)
-#         
-#         #     # Comment out this code block to suppress plotting data
-#         #     plt.plot(wavelength,normalized_amplitude)
-#         #     plt.plot(wavelength,result.best_fit,ls='dashed')
-#         #     if(file_count==0):
-#         #         break
-#         # 
-#         #     file_count+=1
-#         # plt.show()
-#         
-#         # Comment out this block to suppress data writing to disk
-#         temp_stdev=np.std(np.transpose(temp_values)[1:len(np.transpose(temp_values))])
-#         print(temp_stdev)
-#         
-#         fit_curves=pd.DataFrame(fit_curves)
-#         fit_values=pd.DataFrame(fit_values)
-#         temp_values=pd.DataFrame(temp_values)
-#         
-#         fit_curves.to_csv(Path(Path(data_directory)/(save_directory+"fit_curves.csv")),\
-#                                index=False,header=None)
-#         fit_values.to_csv(Path(Path(data_directory)/(save_directory+"fit_values.csv")),\
-#                                index=False,header=None)
-#         temp_values.to_csv(Path(Path(data_directory)/(save_directory+"fit_temp_values.csv")),\
-#                                index=False,header=None)
+    spectrum_data.to_csv(Path(Path(download_dir)/(save_dir+'/spectrum_data.csv')),index=False,header=None)
+    spectrum_fit.to_csv(Path(Path(download_dir)/(save_dir+'/spectrum_fit.csv')),index=False,header=None)
+    fit_values.to_csv(Path(Path(download_dir)/(save_dir+'/fit_values.csv')),index=False,header=None)
+    temp_values.to_csv(Path(Path(download_dir)/(save_dir+'/temp_values.csv')),index=False,header=None)
+
+print("Done reading data!")
