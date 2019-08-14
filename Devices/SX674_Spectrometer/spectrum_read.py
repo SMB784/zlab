@@ -18,8 +18,8 @@ class Spectrum():
         spectrum_data=[[],[]]
         
         for i in range(0,len(spectrum.columns)-2): # -1 cuts last datapoint because it is erroneous
+
             amplitude=np.mean(spectrum.loc[window[1][i]:window[0][i]+window[1][i],i])
-#             amplitude=np.mean(spectrum.loc[window[1][i]:window[0][i]+window[1][i],i])
             wavelength=np.float(self.calibration[0]+i*self.calibration[1])
 
             spectrum_data[0].append(wavelength)

@@ -34,9 +34,24 @@ import re
 GeV=601
 tolerance=0.2
 
-initial_fit=[]
+initial_fit=[[601.0,612,625],\
+            [4.5,11,40],\
+            [1,1,1],0]
 
-temp_cal=[] # from center wavelength vs temp: [intercept, slope]
+lmodel=Model(lorentzianGaussianFit)
+
+lmodel.set_param_hint('c1',min=598,max=605)
+lmodel.set_param_hint('c2',min=610,max=630)
+lmodel.set_param_hint('c3',min=605,max=630)
+                
+lmodel.set_param_hint('w1',min=0)
+lmodel.set_param_hint('w2',min=5,max=20)
+lmodel.set_param_hint('w3',min=0,max=50)
+                        
+params=lmodel.make_params(c1=initial_fit[0][0],w1=initial_fit[1][0],h1=initial_fit[2][0],\
+                          c2=initial_fit[0][1],w2=initial_fit[1][1],h2=initial_fit[2][1],\
+                          c3=initial_fit[0][2],w3=initial_fit[1][2],h3=initial_fit[2][2],\
+                          o1=initial_fit[3])
 
 def doubleLorentzianFit(x,c1,c2,\
                 w1,w2,\
