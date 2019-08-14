@@ -4,15 +4,16 @@ Created on Aug 9, 2019
 @author: sean
 
 The spectrum_read module in this device used to read .FIT spectral image
-files output by the Trius SX674 Camera. 
+files output by the Trius SX674 Camera and generates a spectrum dataframe
+output. 
 
 Required inputs:  .FIT image file directory, camera calibration values
 Returned outputs: pandas dataframe containing wavelength and amplitude data
 
 Example usage:
 
-from SX674_spectrometer import *
-from SX674_spectrometer import spectrum_read
+from Devices.SX674_spectrometer import *
+from Devices.SX674_spectrometer import spectrum_read
 
 image_directory=/home/foo.FIT
 cal_constants=[543.26,0.13497]
