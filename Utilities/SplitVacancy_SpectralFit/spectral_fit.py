@@ -22,12 +22,14 @@ class Fit():
         normalized_amplitude=(amplitude-amplitude.min())/(amplitude.max()-amplitude.min())
 
         result=lmodel.fit(normalized_amplitude,params,x=wavelength)
-
+        
         raw_spectrum=wavelength
         spectrum_fit=wavelength
         
         raw_spectrum=np.c_[raw_spectrum,normalized_amplitude]
         spectrum_fit=np.c_[spectrum_fit,result.best_fit]
+        
+        print(result.best_values)
         
         fit_values=np.array(findValue(result.best_values))
 

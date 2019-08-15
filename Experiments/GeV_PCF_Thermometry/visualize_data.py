@@ -2,8 +2,6 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib as mpl
-from SX674_Spectrometer import *
-import SX674_Spectrometer
 
 
 fontsize=16
@@ -23,31 +21,29 @@ ax.spines['bottom'].set_visible(False)
 ax.xaxis.set_ticks([])
 ax.yaxis.set_ticks([])
 
-fit_trace62mW=pd.read_csv('/home/sean/git/zlab/SX674_Spectrometer/data/5-28-19/NewSpectrometer/62000uW_5ms/processed_data/fit_temp_values.csv',header=None)
-fit_trace27mW=pd.read_csv('/home/sean/git/zlab/SX674_Spectrometer/data/5-28-19/NewSpectrometer/27000uW_10ms/processed_data/fit_temp_values.csv',header=None)
-fit_trace12mW=pd.read_csv('/home/sean/git/zlab/SX674_Spectrometer/data/5-28-19/NewSpectrometer/12000uW_20ms/processed_data/fit_temp_values.csv',header=None)
-fit_trace6mW=pd.read_csv('/home/sean/git/zlab/SX674_Spectrometer/data/5-28-19/NewSpectrometer/2800uW_100ms/processed_data/fit_temp_values.csv',header=None)
+fit_trace62mW=pd.read_csv('/home/sean/git/zlab/Experiments/GeV_PCF_Thermometry/data/7-22-19/34000uW_1ms/processed_data/temp_values.csv',header=None)
+fit_trace27mW=pd.read_csv('/home/sean/git/zlab/Experiments/GeV_PCF_Thermometry/data/7-22-19/18000uW_20ms/processed_data/temp_values.csv',header=None)
+fit_trace12mW=pd.read_csv('/home/sean/git/zlab/Experiments/GeV_PCF_Thermometry/data/7-22-19/6300uW_100ms/processed_data/temp_values.csv',header=None)
+fit_trace6mW=pd.read_csv('/home/sean/git/zlab/Experiments/GeV_PCF_Thermometry/data/7-22-19/430uW_1000ms/processed_data/temp_values.csv',header=None)
 
-time_increment=[.005,.01,.02,.1]
-power_increment=[62,27,12,3]
-temp=34
+time_increment=[.001,.02,.1,1]
+power_increment=[34,18,6.3,.43]
+temp=21-np.min(fit_trace6mW.to_numpy())
 
 fit_trace_array=(fit_trace62mW[0].to_numpy()+temp,fit_trace27mW[0].to_numpy()+temp,\
            fit_trace12mW[0].to_numpy()+temp,fit_trace6mW[0].to_numpy()+temp)
 
 colors=['blue','green','orange','red']
-texts=['62 mW','27 mW','12 mW','3 mW']
+texts=['35 mW','20 mW','5 mW','0.5 mW']
 
 ax0_1=fig.add_subplot(grid[0,0])
 ax0_2=fig.add_subplot(grid[1,0],sharex=ax0_1)
 
 ax0_1.xaxis.set_visible(False)
 ax0_1.spines['bottom'].set_visible(False)
-ax0_1.set_ylim(83,88)
+ax0_1.set_ylim(44,50)
 ax0_2.spines['top'].set_visible(False)
-ax0_2.set_ylim(17,23)
-ax0_1.set_xlim(0,0.8)
-ax0_2.set_xlim(0,0.8)
+ax0_2.set_ylim(20,28)
 
 ax0_2.set_xlabel("Time (sec)")
 
@@ -66,16 +62,14 @@ ax1.set_ylabel("Sensitivity (mK/$\sqrt{Hz}$)")
 stdev_array=[[],[],[]]
 
 for i in range(0,len(fit_trace_array)):
-    times=np.arange(len(fit_trace_array[i]))*time_increment[i]
+    times=np.arange(len(fit_trace_array[i]))*time_increment[i]+time_increment[i]
     
     if(i==0):
-        length=160
-        stdev=np.std(fit_trace_array[i][0:length])
-        ax0_1.plot(times[0:length],fit_trace_array[i][0:length],color=colors[i],lw=3)
+        stdev=np.std(fit_trace_array[i][:])
+        ax0_1.semilogx(times[:],fit_trace_array[i][:],color=colors[i],lw=3)
     else:
         stdev=np.std(fit_trace_array[i])
-        ax0_2.plot(times,fit_trace_array[i],color=colors[i],lw=3)
-    print(stdev)
+        ax0_2.semilogx(times,fit_trace_array[i],color=colors[i],lw=3)
     stdev_array[1].append(1000*stdev/(np.sqrt(1/time_increment[i])))
     stdev_array[0].append(power_increment[i])
 
@@ -87,5 +81,5 @@ ax0_1.annotate('(a)', xy=(-0.2, 1), xycoords='axes fraction')
 ax1.annotate('(b)', xy=(-0.2, 1), xycoords='axes fraction')
 
 plt.tight_layout()
-plt.savefig('/home/sean/git/zlab/SX674_Spectrometer/data/5-28-19/NewSpectrometer/fig5.png',bbox_inches='tight')
+plt.savefig('/home/sean/git/zlab/Experiments/GeV_PCF_Thermometry/fig5.png',bbox_inches='tight')
 plt.show()

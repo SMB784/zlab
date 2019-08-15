@@ -19,7 +19,8 @@ from Utilities.SplitVacancy_SpectralFit import spectral_fit
 data_root_directory=Path(Path(os.getcwd())/'data/')
 download_dir=data_download.Download(data_root_directory).download_data()
 
-# calibration=[543.741,0.068256] #No binning
-calibration=[543.26,0.13497] #4x4 binning
-start=585
-stop=673
+# 7-17-19 to 7-23-19
+# calibration=[559.75,0.067417] #No binning
+calibration=[557.633,0.134624] #4x4 binning
+start=580
+stop=630
