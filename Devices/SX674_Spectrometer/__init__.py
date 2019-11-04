@@ -12,8 +12,8 @@ Returned outputs: pandas dataframe containing wavelength and amplitude data
 
 Example usage:
 
-from Devices.SX674_spectrometer import *
-from Devices.SX674_spectrometer import spectrum_read
+from Devices.SX674_Spectrometer import *
+from Devices.SX674_Spectrometer import spectrum_read
 
 image_directory=/home/foo.FIT
 cal_constants=[543.26,0.13497]
