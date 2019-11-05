@@ -1,5 +1,6 @@
 data/
 Manuscript_Files/
+credentials.txt
 *.json
 *.yaml
 *.png
