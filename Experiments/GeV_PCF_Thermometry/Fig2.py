@@ -3,11 +3,6 @@ Created on Aug 17, 2019
 
 @author: sean
 '''
-'''
-Created on Aug 17, 2019
-
-@author: sean
-'''
 #################################################################################
 ############################# Import Declarations ###############################
 #################################################################################
@@ -21,6 +16,7 @@ import numpy as np
 import pandas as pd
 from lmfit import Model
 from scipy import stats
+import scipy.fftpack
 
 ################################# Data plotting #################################
 
@@ -157,20 +153,27 @@ m_width=stats.linregress(power,cal_width)
 wavelength_fit=power[:]*m_wavelength[0]+m_wavelength[1]
 width_fit=power[:]*m_width[0]+m_width[1]
 
+############################# Temp Trace Import #################################
+
+temp_trace=np.transpose(pd.read_csv(str(os.getcwd())+'/data/Imaging/wire_off_temp_trace.csv',header=None).to_numpy())
+
+period=0.2
+sample_size=100
+
+temp_noise=2.0/sample_size*np.abs(scipy.fftpack.fft(temp_trace[1]*1000)[:sample_size//2])
+frequency=np.linspace(0.0, 1.0/(2.0*period), int(sample_size/2))
+
 #################################################################################
 ############################## Plot Setup Block #################################
 #################################################################################
 
-fontsize=16
-marker_size=12
+fontsize=24
 plt.rcParams.update({'font.size':fontsize})
 
-grid=plt.GridSpec(6,2)
+grid=plt.GridSpec(2,2)
 
-fig,ax=plt.subplots(figsize=(12,12))
-
-ax.set_ylabel("Temperature (C)")
-ax.yaxis.set_label_coords(0.54,0.85)
+fig,ax=plt.subplots(figsize=(12,8))
+ 
 ax.xaxis.set_visible(False)
 ax.spines['left'].set_visible(False)
 ax.spines['right'].set_visible(False)
@@ -179,6 +182,8 @@ ax.spines['bottom'].set_visible(False)
 ax.xaxis.set_ticks([])
 ax.yaxis.set_ticks([])
 
+yformat=EngFormatter()
+
 #################################################################################
 ############################## Upper Left Plot ##################################
 #################################################################################
@@ -186,19 +191,18 @@ ax.yaxis.set_ticks([])
 colors=['red']
 texts=['$\lambda_c$']
 
-UL_ax=fig.add_subplot(grid[0:-4,0])
-patches=[UL_ax.plot([],[],marker='o',ms=marker_size,ls="",mec=None,color=colors[i],label="{:s}".format(texts[i]))[0] for i in range (len(texts))]
+UL_ax=fig.add_subplot(grid[0,0])
 
-UL_ax.set_xlabel("Temperature (C)")
+UL_ax.set_xlabel("$T (\degree C)$")
 UL_ax.set_ylabel("$\lambda_c$ (nm)")
-UL_ax.annotate('$\Delta \lambda_c$/$\Delta T$=0.0078', xy=(0.05, 0.9), xycoords='axes fraction')
-UL_ax.annotate('(c)', xy=(-0.275, 0.95), xycoords='axes fraction')
-UL_ax.legend(loc=('lower right'),handles=patches,fontsize=fontsize,bbox_to_anchor=(1,0),framealpha=0,labelspacing=0,handletextpad=0.1)
+UL_ax.set_ylim(601.17,601.24)
+UL_ax.yaxis.set_major_locator(ticker.MaxNLocator(4))
+UL_ax.annotate('$\Delta \lambda_c$/$\Delta T$=\n0.0078', xy=(0.5, 0.1), xycoords='axes fraction')
 
-UL_ax.scatter(power,cal_wavelength,marker='s',s=75,facecolors='w',edgecolors='r')
-UL_ax.plot(power,wavelength_fit,c='red',lw=3,ls='dashed')
+UL_ax.scatter(power,cal_wavelength,marker='s',s=200,facecolors='w',edgecolors='black')
+UL_ax.plot(power,wavelength_fit,c='black',lw=3,ls='dashed')
 
-UL_ax.annotate('(a)', xy=(-0.275, 0.95), xycoords='axes fraction')
+UL_ax.annotate('(a)',xy=(0.01,0.87),xycoords='axes fraction')
 
 #################################################################################
 ############################## Upper Right Plot #################################
@@ -211,144 +215,159 @@ fit_trace_4=pd.read_csv('/home/sean/git/zlab/Experiments/GeV_PCF_Thermometry/dat
 
 time_increment=[.001,.02,.1,1]
 power_increment=[47,18,6.3,.43]
-temp=21-np.min(fit_trace_4.to_numpy())
+temp=-np.min(fit_trace_4.to_numpy())
 
 fit_trace_array=(fit_trace_1[0].to_numpy()+temp,fit_trace_2[0].to_numpy()+temp,\
            fit_trace_3[0].to_numpy()+temp,fit_trace_4[0].to_numpy()+temp)
 
-colors=['blue','green','orange','red']
-texts=['50 mW','20 mW','5 mW','0.5 mW']
+temp_array=(np.mean(fit_trace_1[0].to_numpy())+temp,np.mean(fit_trace_2[0].to_numpy())+temp,\
+           np.mean(fit_trace_3[0].to_numpy())+temp,1.0)
 
-UR_ax=fig.add_subplot(grid[0:2,1])
-UR_ax.set_ylim(20,80)
-UR_ax.set_xlim(0.0005,150)
-UR_ax.set_xlabel("Time (sec)")
-patches=[UR_ax.plot([],[],marker='o',ms=20,ls="",mec=None,color=colors[i],label="{:s}".format(texts[i]))[0] for i in range (len(texts))]
-
-for i in range(0,len(fit_trace_array)):
-    times=np.arange(len(fit_trace_array[i]))*time_increment[i]+time_increment[i]
-
-    UR_ax.loglog(times,fit_trace_array[i],color=colors[i],lw=3)
-
-UR_ax.yaxis.set_major_formatter(ticker.FuncFormatter(lambda y, _: '{:g}'.format(y)))
-UR_ax.yaxis.set_minor_formatter(ticker.FuncFormatter(lambda y, _: '{:g}'.format(y)))
-UR_ax.xaxis.set_major_formatter(ticker.FuncFormatter(lambda y, _: '{:g}'.format(y)))
-UR_ax.annotate('(b)', xy=(-0.275, 0.95), xycoords='axes fraction')
-
-#################################################################################
-############################## Middle Left Plot #################################
-#################################################################################
-
-ML_ax=fig.add_subplot(grid[2:-2,0])
-
-ML_ax.set_xlabel("Laser Power (mW)")
-ML_ax.set_ylim(10,1500)
-ML_ax.get_xaxis().set_major_formatter(mpl.ticker.ScalarFormatter())
-ML_ax.get_yaxis().set_major_formatter(mpl.ticker.ScalarFormatter())
-
-patches=[ML_ax.plot([],[],marker='o',ms=marker_size,ls="",mec=None,color=colors[i],label="{:s}".format(texts[i]))[0] for i in range (len(texts))]
-ML_ax.legend(loc=('upper right'),handles=patches,fontsize=fontsize,framealpha=0,labelspacing=0,bbox_to_anchor=(1,1),handletextpad=0.1)
-
-ML_ax.set_ylabel("$\eta_T$ (mK / $\sqrt{Hz}$)")
+UR_ax1=fig.add_subplot(grid[0,1])
 
 stdev_array=[[],[]]
 
 for i in range(0,len(fit_trace_array)):
 
-    times=np.arange(len(fit_trace_array[i]))*time_increment[i]+time_increment[i]
-
     stdev=np.std(fit_trace_array[i])
-   
     stdev_array[1].append(1000*stdev/(np.sqrt(1/time_increment[i])))
     stdev_array[0].append(power_increment[i])
 
-    ML_ax.scatter(stdev_array[0][i],stdev_array[1][i],c=colors[i],s=200,zorder=10)    
+    UR_ax1.scatter(stdev_array[0][i],stdev_array[1][i],c='black',s=200,zorder=10)
 
-ML_ax.semilogy(stdev_array[0],stdev_array[1],c='black',lw=2,ls='dashed',zorder=0)
-ML_ax.yaxis.set_major_formatter(ticker.FuncFormatter(lambda y, _: '{:g}'.format(y)))
 
-ML_ax.annotate('(c)', xy=(-0.275, 0.95), xycoords='axes fraction')
+loglogfit=[np.linspace(0.5,100.0,100),1802*np.linspace(0.5,100.0,100)**(-1.11)]
+UR_ax1.loglog(loglogfit[0],loglogfit[1],c='black',lw=3,ls='dashed',zorder=0)
+UR_ax1.yaxis.set_major_formatter(ticker.FuncFormatter(lambda y, _: '{:g}'.format(y)))
+UR_ax1.set_xlabel("$P_{Laser} (mW)$")
+UR_ax1.set_ylim(10,2500)
+UR_ax1.yaxis.set_ticks([10,100,1000],minor=False)
+UR_ax1.set_ylabel("$\eta_T$ (mK / $\sqrt{Hz}$)")
 
-#################################################################################
-############################# Middle Right Plot #################################
-#################################################################################
 
-colors=['blue','green','orange','red']
-texts=['9.5 mW','3 mW','1.52 mW','0.5 mW']
+UR_ax2=UR_ax1.twinx()
+UR_ax2.scatter(stdev_array[0],temp_array,c='red',s=200,zorder=20)
 
-yformat=EngFormatter()
-MR_ax=fig.add_subplot(grid[2:-2,1])
+UR_ax2.xaxis.set_major_formatter(ticker.FuncFormatter(lambda y, _: '{:g}'.format(y)))
+UR_ax2.yaxis.set_minor_formatter(ticker.FuncFormatter(lambda y, _: '{:g}'.format(y)))
+UR_ax2.yaxis.set_ticks([1,30,50],minor=True)
+# UR_ax2.set_yticklabels(['0','30','50'],minor=True,color='r')
+UR_ax2.yaxis.set_ticks([10],minor=False)
+# UR_ax2.set_yticklabels(['10'],minor=False,color='r')
+UR_ax2.set_ylabel("$\delta T (\degree C)$",color='r')
+UR_ax2.tick_params(axis='y', colors='red',which='both')
+UR_ax2.spines['right'].set_color('red')
+UR_ax2.set_ylim(0.1,60)
+UR_ax2.set_xlim(0.3,70)
 
-patches=[MR_ax.plot([],[],marker='o',ms=marker_size,ls="",mec=None,color=colors[i],label="{:s}".format(texts[i]))[0] for i in range (len(texts))]
+UR_ax2.annotate("$\eta_{T}$=\n1802$P_{Laser}^{-1.11}$",xy=(0.05,0.30),xycoords='axes fraction',zorder=10)
+UR_ax1.annotate('(b)',xy=(0.01,0.87),xycoords='axes fraction',zorder=10)
 
-MR_ax.yaxis.set_major_formatter(yformat)
-MR_ax.set_xlabel("Wavelength (nm)")
-MR_ax.set_ylabel("$I_{PL}$ (a.u.)")
-MR_ax.set_xlim(590,700)
-
-MR_ax.legend(loc=('upper right'),handles=patches,fontsize=fontsize,framealpha=0,labelspacing=0,bbox_to_anchor=(1,1),handletextpad=0.1)
-
-spectra=np.flip(spectralData[2:6],axis=0)
-for i in range(0,len(spectra)):
-    MR_ax.plot(spectralData[0],spectra[i],c=colors[i],lw=3)
-
-MR_ax.annotate('(d)', xy=(-0.275, 0.95), xycoords='axes fraction')
+print(stdev_array[0])
+print(stdev_array[1])
+print(temp_array)
 
 #################################################################################
 ############################## Lower Left Plot ##################################
 #################################################################################
 
-LL_ax0=fig.add_subplot(grid[4:,0])
+LL_ax0=fig.add_subplot(grid[1,0])
 
-colors=['black','red']
-texts=['Max $I_{PL}$','SNR']
-patches=[LL_ax0.plot([],[],marker='o',ms=marker_size,ls="",mec=None,color=colors[i],label="{:s}".format(texts[i]))[0] for i in range (len(texts))]
-
-LL_ax0.yaxis.set_major_formatter(yformat)
-LL_ax0.xaxis.set_major_locator(plt.MaxNLocator(3))
-
-LL_ax0.set_xlabel("Laser Power (mW)")
-LL_ax0.set_ylabel("Max $I_{PL}$ (a.u.)")
-LL_ax0.legend(loc=('upper left'),handles=patches,fontsize=fontsize,framealpha=0,labelspacing=0,bbox_to_anchor=(0,1),handletextpad=0.1)
+LL_ax0.set_xscale('log')
+LL_ax0.set_xlabel("$P_{Laser} (mW)$")
+LL_ax0.set_ylabel("SNR (dB)")
+LL_ax0.set_ylim(15,50)
+LL_ax0.yaxis.set_major_locator(ticker.MaxNLocator(4))
 
 LL_ax1=LL_ax0.twinx()
-LL_ax1.set_ylabel("SNR (a.u.)")
-LL_ax1.yaxis.set_major_locator(plt.MaxNLocator(3))
+LL_ax1.set_xscale('log')
+LL_ax1.set_yscale('log')
+LL_ax1.set_ylabel('$\delta T (\degree C)$',color='r')
+LL_ax1.tick_params(axis='y', colors='red',which='both')
+LL_ax1.yaxis.set_ticklabels([],color='r')
+LL_ax1.spines['right'].set_color('red')
+LL_ax1.set_ylim(0.8,40)
+LL_ax1.set_xlim(0.35,12)
+LL_ax1.yaxis.set_major_formatter(ticker.FuncFormatter(lambda y, _: '{:g}'.format(y)))
+LL_ax1.yaxis.set_minor_formatter(ticker.FuncFormatter(lambda y, _: '{:g}'.format(y)))
+LL_ax1.yaxis.set_ticks([1,30],minor=True)
+LL_ax1.set_yticklabels(['0','30'],minor=True)
+LL_ax1.yaxis.set_ticks([10],minor=False)
+LL_ax1.set_yticklabels(['10'],minor=False)
+LL_ax1.xaxis.set_major_formatter(ticker.FuncFormatter(lambda y, _: '{:g}'.format(y)))
 
-LL_ax0.plot(fitData[0],fitData[1],c=colors[0],lw=3)
-LL_ax1.plot(fitData[0],fitData[4],c=colors[1],lw=3,ls='dashed')
+fitData[3,0]=fitData[3,0]+1
 
-LL_ax0.annotate('(e)', xy=(-0.275, 0.95), xycoords='axes fraction')
+LL_ax0.scatter(fitData[0],20*np.log10(fitData[4]),c='black',s=200,zorder=10)
+LL_ax1.scatter(fitData[0],fitData[3],c='r',s=200,zorder=0)
+
+LL_ax0.annotate('(c)',xy=(0.01,0.87),xycoords='axes fraction')
 
 #################################################################################
 ############################## Lower Right Plot #################################
 #################################################################################
 
-colors=['black','red']
-texts=['$\lambda_c$','$\Delta T$']
+LR_ax=fig.add_subplot(grid[1,1])
 
-LR_ax0=fig.add_subplot(grid[4:,1])
-patches=[LR_ax0.plot([],[],marker='o',ms=marker_size,ls="",mec=None,color=colors[i],label="{:s}".format(texts[i]))[0] for i in range (len(texts))]
+LR_ax.set_xlabel('$\\nu_{noise}$ (Hz)')
+LR_ax.set_ylabel('$T_{noise}$ (mK)')
+LR_ax.set_xscale('log')
+LR_ax.set_yscale('log')
+LR_ax.set_ylim(10,1000)
+LR_ax.set_xlim(.04,3)
+LR_ax.xaxis.set_major_formatter(ticker.FuncFormatter(lambda y, _: '{:g}'.format(y)))
+LR_ax.xaxis.set_minor_formatter(ticker.NullFormatter())
+LR_ax.yaxis.set_major_formatter(ticker.ScalarFormatter())
+LR_ax.yaxis.set_minor_formatter(ticker.NullFormatter())
 
-LR_ax0.xaxis.set_major_locator(plt.MaxNLocator(3))
-LR_ax0.set_xlabel("Laser Power (mW)")
+LR_ax.plot(frequency[1:len(frequency)],temp_noise[1:len(temp_noise)],c='black',lw=3,zorder=1)
 
-LR_ax0.yaxis.set_major_locator(plt.MaxNLocator(3))
-LR_ax0.set_ylabel("$\lambda_c$ (nm)")
-
-LR_ax0.legend(loc=('lower right'),handles=patches,fontsize=fontsize,bbox_to_anchor=(1,0.35),framealpha=0,labelspacing=0,handletextpad=0.1)
-
-LR_ax1=LR_ax0.twinx()
-LR_ax1.set_ylabel("$\Delta$T (C)")
-LR_ax1.yaxis.set_major_locator(plt.MaxNLocator(3))
-
-LR_ax0.plot(fitData[0],np.flip(fitData[2]),c=colors[0],lw=3)
-LR_ax1.plot(fitData[0],fitData[3],c=colors[1],lw=3,ls='dashed')
-
-LR_ax0.annotate('(f)', xy=(-0.275, 0.95), xycoords='axes fraction')
+LR_ax.annotate('(d)',xy=(0.01,0.87),xycoords='axes fraction')
 
 ############################## End of Plots ######################################
 
 plt.tight_layout()
 plt.savefig(write_directory+"Fig2.png",bbox_inches='tight')
-# plt.show()
+
+#################################################################################
+############################# Middle Right Plot #################################
+#################################################################################
+# 
+# fontsize=80
+# plt.rcParams.update({'font.size':fontsize})
+# fig2,ax2=plt.subplots(figsize=(12,10))
+# ax2.xaxis.set_visible(False)
+# ax2.spines['left'].set_visible(False)
+# ax2.spines['right'].set_visible(False)
+# ax2.spines['top'].set_visible(False)
+# ax2.spines['bottom'].set_visible(False)
+# ax2.xaxis.set_ticks([])
+# ax2.yaxis.set_ticks([])
+# 
+# colors=['orange']
+# 
+# MR_ax=fig2.add_subplot()
+# 
+# MR_ax.yaxis.set_major_locator(ticker.MaxNLocator(3))
+# MR_ax.xaxis.set_major_locator(ticker.MaxNLocator(2))
+# MR_ax.set_xlabel("$\lambda_c$ (nm)")
+# MR_ax.set_ylabel("$I_{PL}$ (a.u.)")
+# MR_ax.set_xlim(590,700)
+# MR_ax.set_ylim(-500,70000)
+# MR_ax.xaxis.set_tick_params(width=15,length=15)
+# MR_ax.yaxis.set_tick_params(width=15,length=15)
+# MR_ax.spines['left'].set_linewidth(15)
+# MR_ax.spines['bottom'].set_linewidth(15)
+# MR_ax.spines['right'].set_visible(False)
+# MR_ax.spines['top'].set_visible(False)
+# 
+# MR_ax.yaxis.set_major_formatter(yformat)
+#   
+# spectra=np.flip(spectralData[2:6],axis=0)
+# for i in range(0,1):
+#     MR_ax.plot(spectralData[0],spectra[i],c=colors[i],lw=15)
+# 
+# plt.tight_layout()
+# plt.savefig(write_directory+"Fig1_sub.png",bbox_inches='tight')
+
+plt.show()

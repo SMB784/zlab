@@ -4,9 +4,7 @@ Created on Aug 20, 2019
 @author: sean
 '''
 from Devices.Max10_Counting_Board import *
-import numpy as np
-import time
-from conda.base.context import channel_alias_validation
+
 
 filename='/home/sean/Desktop/test'
 
@@ -26,8 +24,6 @@ with open('/home/sean/Desktop/test','rb') as f:
     g2=len(data)*coincidence/(channel_a*channel_b)
 
     end_time=time.time()
-
-    print(len(data))
 
     print('Channel A: '+str(channel_a))
     print('Channel B: '+str(channel_b))

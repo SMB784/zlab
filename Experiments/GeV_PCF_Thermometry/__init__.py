@@ -3,7 +3,21 @@ Created on Aug 12, 2019
 
 @author: sean
 
-Imports and initializations go here
+Contains methods that:
+
+1.) run spectrometer program (run_SX674Spectrometer) on
+    precollected in local directories or data downloaded
+    from teamdrive
+
+2.) fourier filter input images (scanning temp or spectral)
+
+3.) calculate fourier transform resolution trace for PCF
+    probe
+    
+4.) make figs 2 & 3 for manuscript
+
+Data files from Team Drive needed to run:
+
 
 '''
 ########################## Import bolt-on modules ###########################

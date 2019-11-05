@@ -21,8 +21,8 @@ from SplitVacancy_SpectralFit import spectral_fit
 spec_start=600
 spec_stop=625
 input_spectrum=pd.DataFrame([np.arange(1,625),np.random.rand(1,625)])
-spectral_data=spectrum_fit.Fit(spec_start,spec_stop,input_spectrum,fit_model).fit_spectrum()
-print(spectrum)
+spectral_data=spectral_fit.Fit(spec_start,spec_stop,input_spectrum,fit_model).fit_spectrum()
+print(spectral_data)
 
 '''
 from lmfit import Model
@@ -32,7 +32,7 @@ import pandas as pd
 import re
 
 GeV=601
-tolerance=0.2
+tolerance=0.5
 
 initial_fit=[[601.0,612,625],\
             [4.5,11,20],\
