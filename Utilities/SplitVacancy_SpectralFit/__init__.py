@@ -31,7 +31,6 @@ import numpy as np
 import pandas as pd
 import re
 
-GeV=601
 tolerance=0.5
 
 initial_fit=[[601.0,612,625],\
@@ -55,12 +54,12 @@ def doubleLorentzianGaussianFit(x,c1,c2,c3,\
            +h3/(w3*np.sqrt(2*np.pi))*np.exp(-(x-c3)**2/(2*w3**2))\
            +o1
 
-def findValue(bestValues): #input is dictionary output from result.best_values
+def findValue(bestValues,peak_wavelength): #input is dictionary output from result.best_values
     center_FWHM=[]
     for key, value in bestValues.items():
         # returns center wavelength and FWHM values if center wavelength is
         # within tolerance*2 of the GeV center wavelength, else returns 0
-        if np.isclose(a=value,b=GeV,atol=tolerance*2):
+        if np.isclose(a=value,b=peak_wavelength,atol=tolerance*2):
                 center_FWHM.append(value) # center wavelength
                 widthKey='w'+re.findall(r'\d+',key)[0]
                 center_FWHM.append(2*bestValues[widthKey]) # width

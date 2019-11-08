@@ -7,13 +7,22 @@ from Devices.SX674_Spectrometer import *
 
 class Spectrum():
     
-    def __init__(self,image_dir,cal_constants):
-        self.image=image_dir
-        self.calibration=cal_constants
-
+    def __init__(self,*args):
+        if len(args)==2:
+            self.image=args[0]
+            self.calibration=args[1]
+            self.found_dark_frame=False
+        else:
+            self.image=args[0]
+            self.dark_frame=args[1]
+            self.calibration=args[2]
+            self.found_dark_frame=True
     def read_spectrum(self):
         
-        spectrum=image_read.Image(Path(self.image)).read_image()
+        if self.found_dark_frame==True:
+            spectrum=image_read.Image(Path(self.image)).read_image()-self.dark_frame
+        else:
+            spectrum=image_read.Image(Path(self.image)).read_image()
         window=find_max_window(spectrum)
         spectrum_data=[[],[]]
         
