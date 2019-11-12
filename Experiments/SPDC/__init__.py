@@ -8,7 +8,6 @@ import numpy as np
 root_dir='/home/sean/git/zlab/Experiments/SPDC/data/SPDC_Interference/'
 dark_dir='dark'
 
-
 spdc_crosses=Devices.Trius_SX674_Camera.image_read.Image(root_dir,dark_dir).calculate_dark_frame()
 # spdc_crosses=pd.read_csv(data_root_directory,header=None).to_numpy()
 
