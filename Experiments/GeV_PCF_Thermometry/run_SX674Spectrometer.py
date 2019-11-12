@@ -30,6 +30,8 @@ else:
         if directory_exists(Path(download_dir),dark_dir)==True:
             print('Dark frame detected.')
             dark_frame=image_read.Image(Path(download_dir),dark_dir).calculate_dark_frame()
+            pd.DataFrame(dark_frame).to_csv(Path(Path(download_dir)/('dark_data.csv')),index=False,header=None)
+
 
         for file in sorted(files,key=numerical_sort):
             files.sort(key=numerical_sort)

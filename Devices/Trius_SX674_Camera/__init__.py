@@ -30,5 +30,5 @@ from pathlib import Path
 from Utilities.TeamDrive_DataDownload import numerical_sort
 
 def plot_image(image):
-    plt.imshow(np.abs(np.fliplr(image)),plt.cm.gray)
+    plt.imshow(image,plt.cm.gray)
     plt.show()

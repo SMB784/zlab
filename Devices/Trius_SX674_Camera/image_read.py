@@ -20,7 +20,7 @@ class Image():
         hdul = fits.open(self.image_directory)
 
         #reads in data from file, converts to float type, drops first two and last columns (keep 2->len-1)
-        image=pd.DataFrame(hdul[0].data[:,2:len(hdul[0].data[0,:]-1)]).to_numpy()
+        image=pd.DataFrame(hdul[0].data[:,2:len(hdul[0].data[0,:]-1)]).to_numpy(dtype=np.int32)
         im_fft=fftpack.fft2(image)
 
         keep_fraction = 0.05
@@ -45,10 +45,10 @@ class Image():
                 dark_fits = fits.open(Path(Path(self.image_directory)/self.dark_directory)/file)
                 
                 if(dark_count==0):
-                    image=pd.DataFrame(dark_fits[0].data[:,2:len(dark_fits[0].data[0,:]-1)]).to_numpy()
+                    image=pd.DataFrame(dark_fits[0].data[:,2:len(dark_fits[0].data[0,:]-1)]).to_numpy(dtype=np.int32)
                     dark_count+=1
                 else:
-                    image+=pd.DataFrame(dark_fits[0].data[:,2:len(dark_fits[0].data[0,:]-1)]).to_numpy()
+                    image+=pd.DataFrame(dark_fits[0].data[:,2:len(dark_fits[0].data[0,:]-1)]).to_numpy(dtype=np.int32)
                     dark_count+=1
 
         return image/dark_count
