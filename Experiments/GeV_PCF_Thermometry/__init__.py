@@ -25,6 +25,8 @@ from Utilities.TeamDrive_DataDownload import *
 from Utilities.TeamDrive_DataDownload import data_download
 from Devices.SX674_Spectrometer import *
 from Devices.SX674_Spectrometer import spectrum_read
+from Devices.ScienceSurplus_Spectrometer import *
+from Devices.ScienceSurplus_Spectrometer import Spectrum_Read
 from Utilities.SplitVacancy_SpectralFit import *
 from Utilities.SplitVacancy_SpectralFit import spectral_fit
 ########################## Import built-in modules ##########################

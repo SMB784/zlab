@@ -19,6 +19,7 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 import matplotlib.patches as patches
+from matplotlib.collections import LineCollection
 
 ############################## Import/Export Block ##############################
 
@@ -192,6 +193,7 @@ ML_ax.tick_params(axis='x')
 ML_ax.tick_params(axis='y')
 ML_ax.set_xlabel('$\delta x (\mu m)$')
 ML_ax.set_ylabel('$\delta y (\mu m)$')
+ML_ax.xaxis.set_ticks([0,100,200,300,400,500])
 
 heatmap=ML_ax.imshow(avg_temp_10500,cmap='inferno',norm=norm,extent=[0,len(avg_temp_10500[0,:])*stepsize,0,len(avg_temp_10500[:,0])*stepsize],aspect='auto')
 
@@ -251,11 +253,11 @@ MR_ax.annotate('(d)',xy=(0.01,0.90),xycoords='axes fraction',color='white')
 ############################## Lower Left Plot ##################################
 #################################################################################
 
-subgrid=mpl.gridspec.GridSpecFromSubplotSpec(3,1,subplot_spec=grid[4],hspace=0.1)
+subgrid=mpl.gridspec.GridSpecFromSubplotSpec(3,1,subplot_spec=grid[4],hspace=0.2)
 
 # x trace: y,x=60,78:98 and y trace: y,x=45:65,85
 avg_temp_10300_window=np.arange(0,50,5)
-avg_temp_10300_window=np.transpose(np.c_[avg_temp_10300_window,avg_temp_10300[73,56:66],avg_temp_10300[72:82,52]]) # x,y trace
+avg_temp_10300_window=np.transpose(np.c_[avg_temp_10300_window,avg_temp_10300[73,55:65],avg_temp_10300[71:81,52]]) # x,y trace
 # x trace: y,x=80,79:99 and y trace: y,x=75:95,85
 avg_temp_10500_window=(np.arange(0,50,5))
 avg_temp_10500_window=np.transpose(np.c_[avg_temp_10500_window,avg_temp_10500[73,64:74],avg_temp_10500[73:83,64]]) # x,y trace
@@ -263,31 +265,48 @@ avg_temp_10500_window=np.transpose(np.c_[avg_temp_10500_window,avg_temp_10500[73
 avg_temp_10700_window=(np.arange(0,50,5))
 avg_temp_10700_window=np.transpose(np.c_[avg_temp_10700_window,avg_temp_10700[38,69:79],avg_temp_10700[37:47,94]]) # x,y trace
 
+axis_colors=['black','purple','black']
+a=[0,5,35,40]
+b=[0,0,0,0]
+linewidths=[1,5,1]
+points = np.array([a, b]).T.reshape(-1, 1, 2)
+segments = np.concatenate([points[:-1], points[1:]], axis=1)
 LL_ax1=fig.add_subplot(subgrid[2,0])
 LL_ax1.plot(avg_temp_10300_window[0],avg_temp_10300_window[1],color='b',lw=3)
 LL_ax1.plot(avg_temp_10300_window[0],avg_temp_10300_window[2],color='b',ls='dashed',lw=3)
+LL_ax1.set_xlim(0,40)
 LL_ax1.set_xlabel('$d_{x,y} (\mu m)$')
-LL_ax1.set_ylabel('')
+LL_ax1.spines["bottom"].set_visible(False)
 LL_ax1.set_ylim(42.4,42.8)
+lc = LineCollection(segments,colors=axis_colors,linewidth=linewidths,transform=LL_ax1.get_xaxis_transform(), clip_on=False )
+LL_ax1.add_collection(lc)
+LL_ax1.axvline(5,color='purple',ls='dotted',lw=3)
+LL_ax1.axvline(20,color='purple',ls='dashed',lw=3)
+LL_ax1.axvline(35,color='purple',ls='dotted',lw=3)
 
 LL_ax2=fig.add_subplot(subgrid[1,0])
 LL_ax2.plot(avg_temp_10500_window[0],avg_temp_10500_window[1],color='g',lw=3)
 LL_ax2.plot(avg_temp_10500_window[0],avg_temp_10500_window[2],color='g',ls='dashed',lw=3)
+LL_ax2.set_xlim(0,40)
 LL_ax2.set_xlabel('')
 LL_ax2.set_xticks([])
 LL_ax2.set_ylabel('$T (\degree C)$')
 LL_ax2.set_ylim(45.4,45.9)
+LL_ax2.axvline(5,color='purple',ls='dotted',lw=3)
+LL_ax2.axvline(20,color='purple',ls='dashed',lw=3)
+LL_ax2.axvline(35,color='purple',ls='dotted',lw=3)
 
 LL_ax3=fig.add_subplot(subgrid[0,0])
 LL_ax3.plot(avg_temp_10700_window[0],avg_temp_10700_window[1],color='r',lw=3)
 LL_ax3.plot(avg_temp_10700_window[0],avg_temp_10700_window[2],color='r',ls='dashed',lw=3)
+LL_ax3.set_xlim(0,40)
 LL_ax3.set_xlabel('')
 LL_ax3.set_xticks([])
 LL_ax3.set_ylabel('')
 LL_ax3.set_ylim(49.3,50.3)
-
-
-# LL_ax.set_yscale('log')
+LL_ax3.axvline(5,color='purple',ls='dotted',lw=3)
+LL_ax3.axvline(20,color='purple',ls='dashed',lw=3)
+LL_ax3.axvline(35,color='purple',ls='dotted',lw=3)
 
 LL_ax3.annotate('(e)',xy=(0.01,0.70),xycoords='axes fraction')
 

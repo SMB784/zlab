@@ -13,4 +13,4 @@ spdc_crosses=Devices.Trius_SX674_Camera.image_read.Image(root_dir,dark_dir).calc
 
 Devices.Trius_SX674_Camera.plot_image(spdc_crosses)
 
-pd.DataFrame(spdc_crosses).to_csv(root_dir+'SPDC_interference_B.csv',index=False,header=None)
+pd.DataFrame(spdc_crosses).to_csv(root_dir+'SPDC_interference_B_2.csv',index=False,header=None)

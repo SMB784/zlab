@@ -23,7 +23,7 @@ import scipy.fftpack
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 import matplotlib.ticker as ticker
-from matplotlib.ticker import EngFormatter
+from matplotlib.ticker import *#(EngFormatter,MaxNLocator)
 
 #################################################################################
 ############################## Data Import Block ################################
@@ -236,8 +236,9 @@ for i in range(0,len(fit_trace_array)):
     UR_ax1.scatter(stdev_array[0][i],stdev_array[1][i],c='black',s=200,zorder=10)
 
 
-loglogfit=[np.linspace(0.5,100.0,100),1802*np.linspace(0.5,100.0,100)**(-1.11)]
-UR_ax1.loglog(loglogfit[0],loglogfit[1],c='black',lw=3,ls='dashed',zorder=0)
+# loglogfit=[np.linspace(0.5,100.0,100),1802*np.linspace(0.5,100.0,100)**(-1.11)]
+# UR_ax1.loglog(loglogfit[0],loglogfit[1],c='black',lw=3,ls='dashed',zorder=0)
+UR_ax1.loglog(stdev_array[0],stdev_array[1],c='black',lw=3,ls='dashed',zorder=0)
 UR_ax1.yaxis.set_major_formatter(ticker.FuncFormatter(lambda y, _: '{:g}'.format(y)))
 UR_ax1.set_xlabel("$P_{Laser} (mW)$")
 UR_ax1.set_ylim(10,2500)
@@ -247,20 +248,20 @@ UR_ax1.set_ylabel("$\eta_T$ (mK / $\sqrt{Hz}$)")
 
 UR_ax2=UR_ax1.twinx()
 UR_ax2.scatter(stdev_array[0],temp_array,c='red',s=200,zorder=20)
+UR_ax2.loglog(stdev_array[0],temp_array,c='red',lw=3,ls='dotted',zorder=20)
 
 UR_ax2.xaxis.set_major_formatter(ticker.FuncFormatter(lambda y, _: '{:g}'.format(y)))
 UR_ax2.yaxis.set_minor_formatter(ticker.FuncFormatter(lambda y, _: '{:g}'.format(y)))
 UR_ax2.yaxis.set_ticks([1,30,50],minor=True)
-# UR_ax2.set_yticklabels(['0','30','50'],minor=True,color='r')
+UR_ax2.set_yticklabels(['0','30','50'],minor=True,color='r')
 UR_ax2.yaxis.set_ticks([10],minor=False)
-# UR_ax2.set_yticklabels(['10'],minor=False,color='r')
+UR_ax2.set_yticklabels(['10'],minor=False,color='r')
 UR_ax2.set_ylabel("$\delta T (\degree C)$",color='r')
 UR_ax2.tick_params(axis='y', colors='red',which='both')
 UR_ax2.spines['right'].set_color('red')
-UR_ax2.set_ylim(0.1,60)
+UR_ax2.set_ylim(0.7,60)
 UR_ax2.set_xlim(0.3,70)
 
-UR_ax2.annotate("$\eta_{T}$=\n1802$P_{Laser}^{-1.11}$",xy=(0.05,0.30),xycoords='axes fraction',zorder=10)
 UR_ax1.annotate('(b)',xy=(0.01,0.87),xycoords='axes fraction',zorder=10)
 
 print(stdev_array[0])
@@ -299,7 +300,10 @@ LL_ax1.xaxis.set_major_formatter(ticker.FuncFormatter(lambda y, _: '{:g}'.format
 fitData[3,0]=fitData[3,0]+1
 
 LL_ax0.scatter(fitData[0],20*np.log10(fitData[4]),c='black',s=200,zorder=10)
+LL_ax0.plot(fitData[0],20*np.log10(fitData[4]),c='black',lw=3,ls='dashed',zorder=20)
+
 LL_ax1.scatter(fitData[0],fitData[3],c='r',s=200,zorder=0)
+LL_ax1.plot(fitData[0],fitData[3],c='red',lw=3,ls='dotted',zorder=20)
 
 LL_ax0.annotate('(c)',xy=(0.01,0.87),xycoords='axes fraction')
 
@@ -309,18 +313,24 @@ LL_ax0.annotate('(c)',xy=(0.01,0.87),xycoords='axes fraction')
 
 LR_ax=fig.add_subplot(grid[1,1])
 
+noise_frequency=pd.read_csv('/home/sean/git/zlab/Experiments/GeV_PCF_Thermometry/data/11-12-19/air/frequency.csv',header=None).to_numpy()
+temp_noise=pd.read_csv('/home/sean/git/zlab/Experiments/GeV_PCF_Thermometry/data/11-12-19/air/temp_noise.csv',header=None).to_numpy()
+
 LR_ax.set_xlabel('$\\nu_{noise}$ (Hz)')
 LR_ax.set_ylabel('$T_{noise}$ (mK)')
-LR_ax.set_xscale('log')
-LR_ax.set_yscale('log')
-LR_ax.set_ylim(10,1000)
-LR_ax.set_xlim(.04,3)
-LR_ax.xaxis.set_major_formatter(ticker.FuncFormatter(lambda y, _: '{:g}'.format(y)))
-LR_ax.xaxis.set_minor_formatter(ticker.NullFormatter())
-LR_ax.yaxis.set_major_formatter(ticker.ScalarFormatter())
-LR_ax.yaxis.set_minor_formatter(ticker.NullFormatter())
+LR_ax.set_ylim(0.5,2000)
+LR_ax.set_xlim(.01,20)
 
-LR_ax.plot(frequency[1:len(frequency)],temp_noise[1:len(temp_noise)],c='black',lw=3,zorder=1)
+LR_ax.loglog(noise_frequency[0][1:len(noise_frequency[0])],temp_noise[0][1:len(temp_noise[0])],lw=3,color='black')
+
+LR_ax.xaxis.set_major_formatter(ticker.FuncFormatter(lambda y, _: '{:g}'.format(y)))
+LR_ax.xaxis.set_major_locator(LogLocator(numticks=4))
+# LR_ax.xaxis.set_minor_formatter(ticker.NullFormatter())
+LR_ax.yaxis.set_major_formatter(ticker.ScalarFormatter())
+LR_ax.yaxis.set_minor_formatter(ticker.ScalarFormatter())
+LR_ax.yaxis.set_major_locator(LogLocator(numticks=4))
+LR_ax.yaxis.set_minor_locator(LogLocator(numticks=10))
+# LR_ax.yaxis.set_minor_formatter(ticker.NullFormatter())
 
 LR_ax.annotate('(d)',xy=(0.01,0.87),xycoords='axes fraction')
 
