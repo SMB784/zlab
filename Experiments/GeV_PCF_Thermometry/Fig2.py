@@ -337,7 +337,7 @@ LR_ax.annotate('(d)',xy=(0.01,0.87),xycoords='axes fraction')
 ############################## End of Plots ######################################
 
 plt.tight_layout()
-plt.savefig(write_directory+"Fig2.png",bbox_inches='tight')
+# plt.savefig(write_directory+"Fig2.png",bbox_inches='tight')
 
 #################################################################################
 ############################# Middle Right Plot #################################
