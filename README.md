@@ -1,4 +1,4 @@
-#Software for Zheltikov Group at Texas A&M University
+# Software for Zheltikov Group at Texas A&M University
 
 # Installation instructions:
 -----
