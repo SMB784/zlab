@@ -16,7 +16,8 @@ save_dir='processed_data'
 dark_dir='dark'
 spectral_data=[]
 
-temp_cal=[599.6316,0.0078]
+temp_cal_wavelength=0.0078
+temp_cal_width=0.013
 
 if directory_exists(Path(download_dir),save_dir)==True:
     print("Processed data already exists!")
@@ -64,12 +65,14 @@ else:
 
             file_count+=1
 
-    temp_values=pd.DataFrame((fit_values[0]-np.min(fit_values[0]))/temp_cal[1])
+    temp_values_wavelength=pd.DataFrame((fit_values[0]-np.mean(fit_values[0]))/temp_cal_wavelength)
+    temp_values_width=pd.DataFrame((fit_values[1]-np.mean(fit_values[1]))/temp_cal_width)
     spectrum_data=pd.DataFrame(spectrum_data)
     spectrum_fit=pd.DataFrame(spectrum_fit)
     fit_values=pd.DataFrame(np.transpose(fit_values))
 
-    print(np.std(temp_values))
+    print(np.std(temp_values_wavelength))
+    print(np.std(temp_values_width))
 
     # Comment out the block below to suppress data saving
 
@@ -78,6 +81,7 @@ else:
     spectrum_data.to_csv(Path(Path(download_dir)/(save_dir+'/spectrum_data.csv')),index=False,header=None)
     spectrum_fit.to_csv(Path(Path(download_dir)/(save_dir+'/spectrum_fit.csv')),index=False,header=None)
     fit_values.to_csv(Path(Path(download_dir)/(save_dir+'/fit_values.csv')),index=False,header=None)
-    temp_values.to_csv(Path(Path(download_dir)/(save_dir+'/temp_values.csv')),index=False,header=None)
+    temp_values_wavelength.to_csv(Path(Path(download_dir)/(save_dir+'/temp_values.csv')),index=False,header=None)
+    temp_values_width.to_csv(Path(Path(download_dir)/(save_dir+'/temp_values_width.csv')),index=False,header=None)
 
 print("Done reading data!")
