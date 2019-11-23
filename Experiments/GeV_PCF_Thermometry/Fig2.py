@@ -34,6 +34,7 @@ write_directory=str(os.getcwd())+'/Manuscript_Files/'
 
 ########################## Fit Data Import/Analysis #############################
 
+
 input_data=pd.read_csv(data_read_directory+"data.csv")
 
 start=585.0
