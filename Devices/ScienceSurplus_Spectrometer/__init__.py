@@ -18,7 +18,7 @@ from Devices.ScienceSurplus_Spectrometer import spectrum_read
 
 data_directory=/home/foo.csv
 cal_constants=[543.26,0.13497]
-spectrum=spectrum_read.Spectrum(image_directory).read_spectrum()
+spectrum=spectrum_read.Spectrum(data_directory).read_spectrum()
 print(spectrum)
 '''
 ########################## Import built-in modules ###########################
