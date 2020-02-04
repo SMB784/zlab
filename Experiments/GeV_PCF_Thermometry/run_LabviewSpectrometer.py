@@ -5,8 +5,6 @@ Created on Feb 4, 2020
 '''
 from Experiments.GeV_PCF_Thermometry import *
 
-# spectrum=Spectrum_Read.Spectrum('/home/sean/git/zlab/Experiments/GeV_PCF_Thermometry/data/11-12-19/air/50_ms_filter_1-0/SN1398 2019-11-12, 11-18-31.5, A.csv').read_spectrum().to_numpy()
-
 save_dir='processed_data'
 spectral_data=[]
 
