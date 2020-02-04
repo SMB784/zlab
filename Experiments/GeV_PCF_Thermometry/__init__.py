@@ -27,6 +27,8 @@ from Devices.SX674_Spectrometer import *
 from Devices.SX674_Spectrometer import spectrum_read
 from Devices.ScienceSurplus_Spectrometer import *
 from Devices.ScienceSurplus_Spectrometer import Spectrum_Read
+from Devices.Labview_Spectrometer import *
+from Devices.Labview_Spectrometer import SpectrumRead
 from Devices.Sony_DMK_23G618_Camera import *
 from Devices.Sony_DMK_23G618_Camera import img_read
 from Utilities.SplitVacancy_SpectralFit import *
