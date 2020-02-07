@@ -13,10 +13,18 @@ import os
 from pathlib import Path
 from Utilities.TeamDrive_DataDownload import numerical_sort
 
+def moving_average(a, n) :
+    ret = np.cumsum(a, dtype=float)
+    ret[n:] = ret[n:] - ret[:-n]
+    return ret[n - 1:] / n
+
 data_directory='/home/sean/git/zlab/Experiments/GeV_PCF_Thermometry/data/12-5-19_Fiber-Bending/spectra/traces/'
 
 average_temp=[]
-curvature=[0.1111,0.1177,0.125,0.1333,0.1429,0.1538,0.1667,0.1818]
+std=[]
+curvature=[9,8.5,8,7.5,7,6.5,6,5.5]
+
+mpl.rcParams.update({'font.size': 24})
 
 for root,dirs,files in os.walk(data_directory,topdown=True):
     file_count=0
@@ -47,20 +55,29 @@ for root,dirs,files in os.walk(data_directory,topdown=True):
     #         plt.ylabel("$\delta$T (mK)")
     #         plt.show()
 
-            delta_t=input_traces[0]/0.0078-np.mean(first_trace[0]/0.0078)
+            delta_t=input_traces[0]-np.mean(first_trace[0])
             
             average_temp.append(np.mean(delta_t))
+            std.append(np.std(delta_t))
             
-            plt.plot(np.arange(len(input_traces[0]))*period,delta_t)
-            plt.xlabel("Time (sec)")
-            plt.ylabel("$\delta$T (K)")
-            plt.ylim(-10,10)
+            window=100
+            
+            if(file_count%2==0):
+                plt.plot(np.arange(len(input_traces[0]))[window-1:]*period,moving_average(delta_t,window),lw=3,label=r'$R_{c}$='+str(curvature[file_count-2]))
+                plt.xlabel("Time (sec)")
+                plt.ylabel("$\delta \lambda$ (nm)")
+                plt.ylim(-0.03,0.02)
 
         file_count+=1
 
+plt.legend(loc="upper left",fontsize=12,ncol=2)
+plt.tight_layout()
 plt.show()
 
-plt.scatter(curvature,average_temp)
-plt.xlabel(r"Curvature ($cm^{-1}$)")
-plt.ylabel(r"$\langle\delta T\rangle$ (K)")
+
+plt.plot(curvature,average_temp,lw=3,c='b')
+plt.errorbar(curvature,average_temp,yerr=std,lw=3,capsize=5,capthick=3,marker='o',fmt='.',c='brape')
+plt.xlabel(r"$R_{c}$ (cm)")
+plt.ylabel(r"$\langle\delta \lambda \rangle$ (nm)")
+plt.tight_layout()
 plt.show()

@@ -7,12 +7,13 @@ import pandas as pd
 from pathlib import Path
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib_scalebar.scalebar import ScaleBar
 import os
 from Utilities.TeamDrive_DataDownload import numerical_sort
 
 data_directory='/home/sean/git/zlab/Experiments/GeV_PCF_Thermometry/data/12-5-19_Fiber-Bending/pics/position_average_frames/'
 
-curvature=[0.1177,0.125,0.1333,0.1429,0.1538,0.1667,0.1818]
+curvature=[8.5,8,7.5,7,6.5,6,5.5]
 image_list=[]
 
 def normalize(image):
@@ -31,14 +32,16 @@ for root,dirs,files in os.walk(data_directory,topdown=True):
 
         file_count+=1
 
-fig=plt.figure(figsize=(16, 4))
+fig=plt.figure(figsize=(10,6))
 
 for i in range(1,len(image_list)+1):
-    fig.add_subplot(1,len(image_list), i,title=r'r='+str(curvature[i-1])+' $cm^{-1}$')
+    fig.add_subplot(2,4,i,title=r'r='+str(curvature[i-1])+' cm')
     if(i==1):
         plt.imshow(image_list[i-1],plt.cm.gray)
         plt.ylabel("y-axis Pixel #")
         plt.xlabel("x-axis Pixel #")
+        scalebar=ScaleBar(0.0000003)
+        plt.gca().add_artist(scalebar)
     else:
         plt.imshow(image_list[0]-image_list[i-1],plt.cm.hsv)
         plt.xlabel("x-axis Pixel #")

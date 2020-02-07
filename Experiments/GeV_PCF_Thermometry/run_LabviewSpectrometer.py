@@ -25,7 +25,8 @@ else:
             input_spectrum=SpectrumRead.Spectrum(Path(download_dir)/file).read_spectrum()
             fit_data=spectral_fit.Fit(start,stop,input_spectrum).fit_spectrum()
 
-            if(fit_data[2][0]==0):
+            if(fit_data[3][0]==0):
+                print(fit_data[3][0])
                 print("Fit invalid, skipped this entry")
                 file_count+=1
                 plt.plot(input_spectrum[0],input_spectrum[1])
@@ -33,19 +34,18 @@ else:
                 continue
 
             if(file_count==0):
-                spectrum_data=np.transpose(fit_data[0])[0]
-                spectrum_fit=np.transpose(fit_data[1])[0]
-                fit_values=np.transpose(fit_data[2])
+                spectrum_data=np.transpose(fit_data[1])[0]
+                spectrum_fit=np.transpose(fit_data[2])[0]
+                fit_values=np.transpose(fit_data[3])
             else:
-                spectrum_data=np.c_[spectrum_data,np.transpose(fit_data[0])[1]]
-                spectrum_fit=np.c_[spectrum_fit,np.transpose(fit_data[1])[1]]
-                fit_values=np.c_[fit_values,np.transpose(fit_data[2])]
+                spectrum_data=np.c_[spectrum_data,np.transpose(fit_data[1])[1]]
+                spectrum_fit=np.c_[spectrum_fit,np.transpose(fit_data[2])[1]]
+                fit_values=np.c_[fit_values,np.transpose(fit_data[3])]
 
             if(file_count%100==0):
                 print(os.path.join(root,file))
 
             file_count+=1
-
         break
 
     print(np.mean(fit_values[0])/temp_cal[1])

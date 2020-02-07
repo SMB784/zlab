@@ -44,5 +44,9 @@ download_dir=data_download.Download(data_root_directory).download_data()
 # calibration=[557.633,0.134624] #4x4 binning
 # 11-05-19
 calibration=[537.268697914187,0.14070300109619718] #4x4 binning
-start=580
-stop=630
+start=590
+stop=620
+
+# for data older than 02/06/20
+# start=580
+# stop=630

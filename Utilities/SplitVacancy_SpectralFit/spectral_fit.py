@@ -23,14 +23,16 @@ class Fit():
 
         result=lmodel.fit(normalized_amplitude,params,x=wavelength)
         
+        normalized_spectrum=wavelength
         raw_spectrum=wavelength
         spectrum_fit=wavelength
         
-        raw_spectrum=np.c_[raw_spectrum,normalized_amplitude]
+        raw_spectrum=np.c_[raw_spectrum,amplitude]
+        normalized_spectrum=np.c_[normalized_spectrum,normalized_amplitude]
         spectrum_fit=np.c_[spectrum_fit,result.best_fit]
         
         ZPL_wavelength=wavelength[np.where(normalized_amplitude==np.max(normalized_amplitude))]
         
         fit_values=np.array(findValue(result.best_values,ZPL_wavelength))
 
-        return raw_spectrum,spectrum_fit,fit_values
+        return raw_spectrum,normalized_spectrum,spectrum_fit,fit_values

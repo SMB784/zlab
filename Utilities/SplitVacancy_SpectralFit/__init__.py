@@ -33,9 +33,14 @@ import re
 
 tolerance=0.5
 
-initial_fit=[[601.0,612,625],\
+initial_fit=[[601.0,615,625],\
             [4.5,11,20],\
             [1,1,1],0]
+
+# for data older than 02/06/20
+# initial_fit=[[601.0,612,625],\
+#             [4.5,11,20],\
+#             [1,1,1],0]
 
 def doubleLorentzianFit(x,c1,c2,\
                 w1,w2,\

@@ -27,7 +27,7 @@ else:
             input_spectrum=Spectrum_Read.Spectrum(Path(download_dir)/file).read_spectrum()
             fit_data=spectral_fit.Fit(start,stop,input_spectrum).fit_spectrum()
 
-            if(fit_data[2][0]==0):
+            if(fit_data[3][0]==0):
                 print("Fit invalid, skipped this entry")
                 file_count+=1
                 plt.plot(input_spectrum[0],input_spectrum[1])
@@ -35,13 +35,15 @@ else:
                 continue
 
             if(file_count==0):
-                spectrum_data=np.transpose(fit_data[0])[0]
-                spectrum_fit=np.transpose(fit_data[1])[0]
-                fit_values=np.transpose(fit_data[2])
+                raw_spectra=np.transpose(fit_data[0])[0]
+                spectrum_data=np.transpose(fit_data[1])[0]
+                spectrum_fit=np.transpose(fit_data[2])[0]
+                fit_values=np.transpose(fit_data[3])
             else:
-                spectrum_data=np.c_[spectrum_data,np.transpose(fit_data[0])[1]]
-                spectrum_fit=np.c_[spectrum_fit,np.transpose(fit_data[1])[1]]
-                fit_values=np.c_[fit_values,np.transpose(fit_data[2])]
+                raw_spectra=np.c_[raw_spectra,np.transpose(fit_data[0])[1]]
+                spectrum_data=np.c_[spectrum_data,np.transpose(fit_data[1])[1]]
+                spectrum_fit=np.c_[spectrum_fit,np.transpose(fit_data[2])[1]]
+                fit_values=np.c_[fit_values,np.transpose(fit_data[3])]
 
             if(file_count%100==0):
                 print(os.path.join(root,file))
@@ -52,6 +54,7 @@ else:
 
     print(np.mean(fit_values[0])/temp_cal[1])
     temp_values=pd.DataFrame((fit_values[0]-np.min(fit_values[0]))/temp_cal[1])
+    raw_spectra=pd.DataFrame(raw_spectra)
     spectrum_data=pd.DataFrame(spectrum_data)
     spectrum_fit=pd.DataFrame(spectrum_fit)
     fit_values=pd.DataFrame(np.transpose(fit_values))
@@ -62,6 +65,7 @@ else:
 
     os.mkdir(Path(Path(download_dir)/save_dir))
 
+    raw_spectra.to_csv(Path(Path(download_dir)/(save_dir+'/raw_spectra.csv')),index=False,header=None)
     spectrum_data.to_csv(Path(Path(download_dir)/(save_dir+'/spectrum_data.csv')),index=False,header=None)
     spectrum_fit.to_csv(Path(Path(download_dir)/(save_dir+'/spectrum_fit.csv')),index=False,header=None)
     fit_values.to_csv(Path(Path(download_dir)/(save_dir+'/fit_values.csv')),index=False,header=None)
