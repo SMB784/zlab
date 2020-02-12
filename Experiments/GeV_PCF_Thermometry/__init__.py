@@ -14,7 +14,7 @@ Contains methods that:
 3.) calculate fourier transform resolution trace for PCF
     probe
     
-4.) make figs 2 & 3 for manuscript
+4.) make figs 2, 3, & 4 for manuscript
 
 Data files from Team Drive needed to run:
 

@@ -26,8 +26,7 @@ else:
             fit_data=spectral_fit.Fit(start,stop,input_spectrum).fit_spectrum()
 
             if(fit_data[3][0]==0):
-                print(fit_data[3][0])
-                print("Fit invalid, skipped this entry")
+                print("Fit invalid, skipped file number: "+str(file_count))
                 file_count+=1
                 plt.plot(input_spectrum[0],input_spectrum[1])
                 plt.show()
