@@ -24,7 +24,6 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 import matplotlib.patches as patches
-from matplotlib.collections import LineCollection
 
 ############################## Import/Export Block ##############################
 

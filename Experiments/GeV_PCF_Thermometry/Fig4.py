@@ -20,6 +20,7 @@ import matplotlib.pyplot as plt
 import matplotlib as mpl
 import matplotlib.patches as patches
 from matplotlib.collections import LineCollection
+from matplotlib.ticker import EngFormatter
 
 ############################## Import/Export Block ##############################
 

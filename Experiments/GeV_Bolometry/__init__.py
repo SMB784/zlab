@@ -11,11 +11,16 @@ Data files from Team Drive needed to run:
 
 
 '''
-########################## Import bolt-on modules ###########################
-from Utilities.TeamDrive_DataDownload import *
-from Utilities.TeamDrive_DataDownload import data_download
 ########################## Import built-in modules ##########################
-
+import os
+import numpy as np
+import pandas as pd
+from pathlib import Path
+import matplotlib.pyplot as plt
+import matplotlib as mpl
+import matplotlib.patches as patches
+import matplotlib.ticker as ticker
+from matplotlib.ticker import EngFormatter
 ############################## Initializations ##############################
 data_root_directory=Path(Path(os.getcwd())/'data/')
-download_dir=data_download.Download(data_root_directory).download_data()
+write_directory=Path(Path(os.getcwd())/'Manuscript_Files/')
