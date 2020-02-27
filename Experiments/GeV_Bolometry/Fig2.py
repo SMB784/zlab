@@ -10,6 +10,7 @@ from Experiments.GeV_Bolometry import *
 data_2_a=np.transpose(pd.read_csv(Path(data_root_directory/'2a.csv'),dtype=float,skiprows=1,header=None).to_numpy())[:,0:100]
 data_2_b=np.transpose(pd.read_csv(Path(data_root_directory/'2b.csv'),dtype=float,skiprows=1,header=None).to_numpy())[:,701:801]
 data_2_c=np.transpose(pd.read_csv(Path(data_root_directory/'2c.csv'),dtype=float,skiprows=1,usecols=[0,1,4,5,8,9],header=None).dropna(axis=0,how='any').to_numpy())
+data_2_d=mpl.image.imread(str(Path(data_root_directory/'2d.png')))
 data_2_e=np.transpose(pd.read_csv(Path(data_root_directory/'2e.csv'),dtype=float,skiprows=1,nrows=8,header=None).to_numpy())
 data_2_f=np.transpose(pd.read_csv(Path(data_root_directory/'2f.csv'),dtype=float,skiprows=1,header=None).to_numpy())
 ################################## Plot Setup #################################
@@ -112,8 +113,6 @@ ML_ax.annotate('(c)',xy=(0.0125,0.9125),xycoords='axes fraction')
 ############################# Middle Right Plot ###############################
 ###############################################################################
 
-diagram=mpl.image.imread(str(Path(data_root_directory/'2d.png')))
-
 MR_ax=fig.add_subplot(grid[1,1])
 
 MR_ax.xaxis.set_visible(False)
@@ -125,7 +124,7 @@ MR_ax.spines['bottom'].set_visible(False)
 MR_ax.xaxis.set_ticks([])
 MR_ax.yaxis.set_ticks([])
 
-MR_ax.imshow(diagram,aspect='auto')
+MR_ax.imshow(data_2_d,aspect='auto')
 
 MR_ax.annotate('(d)',xy=(0.0125,0.9125),xycoords='axes fraction',c='white')
 

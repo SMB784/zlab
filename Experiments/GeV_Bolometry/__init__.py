@@ -15,6 +15,7 @@ Data files from Team Drive needed to run:
 import os
 import numpy as np
 import pandas as pd
+from scipy import interpolate
 from pathlib import Path
 import matplotlib.pyplot as plt
 import matplotlib as mpl
