@@ -30,7 +30,7 @@ from matplotlib.ticker import *#(EngFormatter,MaxNLocator)
 #################################################################################
 
 data_read_directory=str(os.getcwd())+'/data/Microdiamond_Calibration/'
-write_directory=str(os.getcwd())+'/Manuscript_Files/'
+write_directory=str(os.getcwd())+'/Manuscript_Files/Rev1_Draft/'
 
 ########################## Fit Data Import/Analysis #############################
 
@@ -194,7 +194,7 @@ texts=['$\lambda_c$']
 
 UL_ax=fig.add_subplot(grid[0,0])
 
-UL_ax.set_xlabel("$T (\degree C)$")
+UL_ax.set_xlabel("T ($\degree C$)")
 UL_ax.set_ylabel("$\lambda_c$ (nm)")
 UL_ax.set_ylim(601.17,601.24)
 UL_ax.yaxis.set_major_locator(ticker.MaxNLocator(4))
@@ -241,10 +241,10 @@ for i in range(0,len(fit_trace_array)):
 # UR_ax1.loglog(loglogfit[0],loglogfit[1],c='black',lw=3,ls='dashed',zorder=0)
 UR_ax1.loglog(stdev_array[0],stdev_array[1],c='black',lw=3,ls='dashed',zorder=0)
 UR_ax1.yaxis.set_major_formatter(ticker.FuncFormatter(lambda y, _: '{:g}'.format(y)))
-UR_ax1.set_xlabel("$P_{Laser} (mW)$")
+UR_ax1.set_xlabel("$P_{Laser}$ (mW)")
 UR_ax1.set_ylim(10,2500)
 UR_ax1.yaxis.set_ticks([10,100,1000],minor=False)
-UR_ax1.set_ylabel("$\eta_T$ (mK / $\sqrt{Hz}$)")
+UR_ax1.set_ylabel("$\eta_T$  (mK / $\sqrt{Hz}$)")
 
 
 UR_ax2=UR_ax1.twinx()
@@ -257,7 +257,7 @@ UR_ax2.yaxis.set_ticks([1,30,50],minor=True)
 UR_ax2.set_yticklabels(['0','30','50'],minor=True,color='r')
 UR_ax2.yaxis.set_ticks([10],minor=False)
 UR_ax2.set_yticklabels(['10'],minor=False,color='r')
-UR_ax2.set_ylabel("$\delta T (\degree C)$",color='r')
+UR_ax2.set_ylabel("$\delta T$ ($\degree C$)",color='r')
 UR_ax2.tick_params(axis='y', colors='red',which='both')
 UR_ax2.spines['right'].set_color('red')
 UR_ax2.set_ylim(0.7,60)
@@ -276,7 +276,7 @@ print(temp_array)
 LL_ax0=fig.add_subplot(grid[1,0])
 
 LL_ax0.set_xscale('log')
-LL_ax0.set_xlabel("$P_{Laser} (mW)$")
+LL_ax0.set_xlabel("$P_{Laser}$ (mW)")
 LL_ax0.set_ylabel("SNR (dB)")
 LL_ax0.set_ylim(15,50)
 LL_ax0.yaxis.set_major_locator(ticker.MaxNLocator(4))
@@ -338,47 +338,5 @@ LR_ax.annotate('(d)',xy=(0.01,0.87),xycoords='axes fraction')
 ############################## End of Plots ######################################
 
 plt.tight_layout()
-# plt.savefig(write_directory+"Fig2.png",bbox_inches='tight')
-
-#################################################################################
-############################# Middle Right Plot #################################
-#################################################################################
-# 
-# fontsize=80
-# plt.rcParams.update({'font.size':fontsize})
-# fig2,ax2=plt.subplots(figsize=(12,10))
-# ax2.xaxis.set_visible(False)
-# ax2.spines['left'].set_visible(False)
-# ax2.spines['right'].set_visible(False)
-# ax2.spines['top'].set_visible(False)
-# ax2.spines['bottom'].set_visible(False)
-# ax2.xaxis.set_ticks([])
-# ax2.yaxis.set_ticks([])
-# 
-# colors=['orange']
-# 
-# MR_ax=fig2.add_subplot()
-# 
-# MR_ax.yaxis.set_major_locator(ticker.MaxNLocator(3))
-# MR_ax.xaxis.set_major_locator(ticker.MaxNLocator(2))
-# MR_ax.set_xlabel("$\lambda_c$ (nm)")
-# MR_ax.set_ylabel("$I_{PL}$ (a.u.)")
-# MR_ax.set_xlim(590,700)
-# MR_ax.set_ylim(-500,70000)
-# MR_ax.xaxis.set_tick_params(width=15,length=15)
-# MR_ax.yaxis.set_tick_params(width=15,length=15)
-# MR_ax.spines['left'].set_linewidth(15)
-# MR_ax.spines['bottom'].set_linewidth(15)
-# MR_ax.spines['right'].set_visible(False)
-# MR_ax.spines['top'].set_visible(False)
-# 
-# MR_ax.yaxis.set_major_formatter(yformat)
-#   
-# spectra=np.flip(spectralData[2:6],axis=0)
-# for i in range(0,1):
-#     MR_ax.plot(spectralData[0],spectra[i],c=colors[i],lw=15)
-# 
-# plt.tight_layout()
-# plt.savefig(write_directory+"Fig1_sub.png",bbox_inches='tight')
-
+plt.savefig(write_directory+"Fig2_rev1_sub.png",bbox_inches='tight')
 plt.show()

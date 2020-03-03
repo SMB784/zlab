@@ -88,8 +88,8 @@ x_scan=pd.read_csv(Path(data_read_directory+'two_wire_x_scan.csv'),header=None).
 
 R_ax=fig.add_subplot(grid[0,1])
 
-R_ax.set_ylabel('$\delta x (\mu m)$')
-R_ax.set_xlabel('$T (\degree C)$')
+R_ax.set_ylabel('$\delta x$ ($\mu m$)')
+R_ax.set_xlabel('T ($\degree C$)')
 R_ax.yaxis.set_ticks([0,300,600,895])
 R_ax.set_yticklabels(['0','300','600','900'])
 R_ax.set_ylim(-50,1000)

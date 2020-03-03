@@ -25,7 +25,7 @@ from matplotlib.ticker import EngFormatter
 ############################## Import/Export Block ##############################
 
 data_read_directory=str(os.getcwd())+'/data/Imaging/'
-write_directory=str(os.getcwd())+'/Manuscript_Files/'
+write_directory=str(os.getcwd())+'/Manuscript_Files/Rev1_Draft/'
 
 ############################# Temperature Conversion ############################
 
@@ -97,8 +97,8 @@ UL_ax=fig.add_subplot(grid[0,0])
 # to make tick labels line up right
 z_temp=np.flip(np.append(np.flip(z_temp,axis=0),[[500.0,0.0,0.0]],axis=0),axis=0)
 
-UL_ax.set_xlabel('$\delta z (\mu m)$')
-UL_ax.set_ylabel('$T (\degree C)$')
+UL_ax.set_xlabel('$\delta z$ ($\mu m$)')
+UL_ax.set_ylabel('T ($\degree C$)')
 UL_ax.set_xlim(-25,500)
 UL_ax.xaxis.set_ticks([0,100,200,300,400,500])
 UL_ax.set_xticklabels(['0','100','200','300','400','500'])
@@ -117,7 +117,7 @@ for i in range(0,len(z_temp[:,1])):
 cax = UL_ax.inset_axes([0.65,0.666,0.05,0.233]) 
 cbar_inset=fig.colorbar(heatmap,cax=cax, orientation='vertical')
 cbar=fig.colorbar(heatmap,ax=UL_ax,cax=cax)
-cbar.set_label('$T (\degree C)$')
+cbar.set_label('T ($\degree C$)')
 
 UL_inset=UL_ax.inset_axes([0.0,0.0,0.333,0.333])
 UL_inset.imshow(wire_image,extent=[0,100,0,100],aspect='auto')
@@ -127,8 +127,9 @@ UL_inset.xaxis.set_label_position('top')
 UL_inset.yaxis.set_label_position('right')
 UL_inset.xaxis.set_ticks([25,75])
 UL_inset.yaxis.set_ticks([25,75])
-UL_inset.set_xlabel('$d_x (\mu m)$')
-UL_inset.set_ylabel('$d_y (\mu m)$')
+UL_inset.set_xlabel('$d_x$ ($\mu m$)')
+UL_ax.annotate('$d_y$ ($\mu m$)',xy=(0.470,0.05),xycoords='axes fraction',rotation=90)
+
 
 x_trace = patches.Rectangle((25,0),0,100,lw=4,ls='dotted',edgecolor='yellow',facecolor='none',zorder=20)
 y_trace = patches.Rectangle((0,25),100,0,lw=4,ls='dotted',edgecolor='yellow',facecolor='none',zorder=20)
@@ -148,10 +149,10 @@ UR_ax=fig.add_subplot(grid[0,1])
 
 UR_ax.tick_params(axis='x')
 UR_ax.tick_params(axis='y')
-UR_ax.set_xlabel('$\delta x (\mu m)$')
+UR_ax.set_xlabel('$\delta x$ ($\mu m$)')
 UR_ax.xaxis.set_ticks([0,100,200,300,400,495])
 UR_ax.set_xticklabels(['0','100','200','300','400','500'])
-UR_ax.set_ylabel('$\delta y (\mu m)$')
+UR_ax.set_ylabel('$\delta y$ ($\mu m$)')
 
 heatmap=UR_ax.imshow(avg_temp_10700,cmap='inferno',norm=norm,extent=[0,len(avg_temp_10700[0,:])*stepsize,0,len(avg_temp_10700[:,0])*stepsize],aspect='auto')
 
@@ -170,12 +171,12 @@ UR_inset.tick_params(axis='x', colors='black')
 UR_inset.tick_params(axis='y', colors='black')
 
 subheatmap=UR_inset.imshow(avg_temp_10700,cmap='gray',norm=norm_inset,extent=[0,len(avg_temp_10700[0,:])*stepsize,0,len(avg_temp_10700[:,0])*stepsize],aspect='auto')
-cbar_inset_ax = UR_ax.inset_axes([0.50,0.05,0.05,0.233]) 
+cbar_inset_ax = UR_ax.inset_axes([0.50,0.055,0.05,0.238]) 
 cbar_inset=fig.colorbar(subheatmap,cax=cbar_inset_ax, orientation='vertical')
 cbar_inset.set_ticks([48.75,49.75,50.75])
 cbar_inset.ax.set_yticklabels(['0', '1', '2'])
 cbar_inset.ax.tick_params(colors='black')
-cbar_inset.set_label('$\delta T (\degree C)$',color='black')
+cbar_inset.set_label('$\delta T$ ($\degree C$)',color='black')
 
 UR_ax.indicate_inset_zoom(UR_inset,lw=3,ls='dashed',edgecolor='black',alpha=1)
 
@@ -192,8 +193,8 @@ ML_ax=fig.add_subplot(grid[1,0])
 
 ML_ax.tick_params(axis='x')
 ML_ax.tick_params(axis='y')
-ML_ax.set_xlabel('$\delta x (\mu m)$')
-ML_ax.set_ylabel('$\delta y (\mu m)$')
+ML_ax.set_xlabel('$\delta x$ ($\mu m$)')
+ML_ax.set_ylabel('$\delta y$ ($\mu m$)')
 ML_ax.xaxis.set_ticks([0,100,200,300,400,500])
 
 heatmap=ML_ax.imshow(avg_temp_10500,cmap='inferno',norm=norm,extent=[0,len(avg_temp_10500[0,:])*stepsize,0,len(avg_temp_10500[:,0])*stepsize],aspect='auto')
@@ -224,10 +225,10 @@ MR_ax=fig.add_subplot(grid[1,1])
 
 MR_ax.tick_params(axis='x')
 MR_ax.tick_params(axis='y')
-MR_ax.set_xlabel('$\delta x (\mu m)$')
+MR_ax.set_xlabel('$\delta x$ ($\mu m$)')
 MR_ax.xaxis.set_ticks([0,100,200,300,400,495])
 MR_ax.set_xticklabels(['0','100','200','300','400','500'])
-MR_ax.set_ylabel('$\delta y (\mu m)$')
+MR_ax.set_ylabel('$\delta y$ ($\mu m$)')
 
 heatmap=MR_ax.imshow(avg_temp_10300,cmap='inferno',norm=norm,extent=[0,len(avg_temp_10300[0,:])*stepsize,0,len(avg_temp_10300[:,0])*stepsize],aspect='auto')
 
@@ -278,7 +279,7 @@ LL_ax1.plot(avg_temp_10300_window[0],avg_temp_10300_window[2],color='b',ls='dash
 LL_ax1.set_xlim(0,40)
 LL_ax1.xaxis.set_ticks([0,20,40])
 LL_ax1.set_xticklabels(['30','50','70'])
-LL_ax1.set_xlabel('$d_{x,y} (\mu m)$')
+LL_ax1.set_xlabel('$d_{x,y}$ ($\mu m$)')
 LL_ax1.spines["bottom"].set_visible(False)
 LL_ax1.set_ylim(42.4,42.8)
 lc = LineCollection(segments,colors=axis_colors,linewidth=linewidths,transform=LL_ax1.get_xaxis_transform(), clip_on=False )
@@ -293,7 +294,7 @@ LL_ax2.plot(avg_temp_10500_window[0],avg_temp_10500_window[2],color='g',ls='dash
 LL_ax2.set_xlim(0,40)
 LL_ax2.set_xlabel('')
 LL_ax2.set_xticks([])
-LL_ax2.set_ylabel('$T (\degree C)$')
+LL_ax2.set_ylabel('T ($\degree C$)')
 LL_ax2.set_ylim(45.4,45.9)
 LL_ax2.axvline(5,color='purple',ls='dotted',lw=3)
 LL_ax2.axvline(20,color='purple',ls='dashed',lw=3)
@@ -333,12 +334,12 @@ LR_ax1.plot(avg_temp_10700_trace[0],avg_temp_10700_trace[1],color='purple',lw=3,
 LR_ax1.bar(riemann_array[0],riemann_array[1],color='orange',align='center')
 
 LR_ax1.set_xlabel('Wire Number')
-LR_ax1.set_ylabel('$T (\degree C)$')
+LR_ax1.set_ylabel('T ($\degree C$)')
 LR_ax1.set_ylim(46,51)
 LR_ax1.set_xlim(0.5,9.5)
 LR_ax1.set_xticks(np.arange(1,10,2))
 
-LR_ax2.set_xlabel('$\delta y (\mu m)$',labelpad=10)
+LR_ax2.set_xlabel('$\delta y$ ($\mu m$)',labelpad=10)
 LR_ax2.set_xticks(np.arange(0,600,100)) #600 cuz drops last entry
 LR_ax2.set_xticklabels(np.arange(0,600,100))
 
@@ -347,5 +348,5 @@ LR_ax1.annotate('(f)',xy=(0.01,0.90),xycoords='axes fraction')
 ############################### Plot Export ######################################
 
 plt.tight_layout()
-plt.savefig(write_directory+"Fig4.png",bbox_inches='tight')
+plt.savefig(write_directory+"Fig4_rev1.png",bbox_inches='tight')
 plt.show()
