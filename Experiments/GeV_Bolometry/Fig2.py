@@ -36,9 +36,9 @@ ax.yaxis.set_ticks([])
 
 UL_ax=fig.add_subplot(grid[0,0])
 
-UL_ax.plot(data_2_a[0],data_2_a[1],lw=4,c='b',zorder=5)
+UL_ax.plot(data_2_a[0],data_2_a[1],lw=4,c='r',zorder=5)
 UL_ax.plot(data_2_a[0],data_2_a[2],lw=4,c='g',zorder=4)
-UL_ax.plot(data_2_a[0],data_2_a[3],lw=4,c='r',zorder=3)
+UL_ax.plot(data_2_a[0],data_2_a[3],lw=4,c='b',zorder=3)
 
 UL_ax.set_ylabel('PL Amplitude (a. u.)')
 UL_ax.set_xlabel('$\lambda_c$ (nm)')
@@ -48,7 +48,7 @@ UL_ax.yaxis.set_ticks([5000,30000,55000])
 UL_ax.yaxis.set_major_formatter(EngFormatter())
 UL_ax.set_ylim(1,60000)
 
-labels=['21$\degree$C','28$\degree$C','44$\degree$C']
+labels=['44$\degree$C','28$\degree$C','21$\degree$C']
 handles=UL_ax.get_legend_handles_labels()
 UL_ax.legend(handles,labels=labels,frameon=False,loc='upper right')
 
